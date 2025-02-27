@@ -14,37 +14,8 @@ from dataset.swat import get_loaders as get_swat_loaders
 
 from utils import save_results
 
-model_name="madgan"
 
-if model_name=="patchtrad":
-    from models.patchtrad import PatchTradLit as model
-elif model_name=="aelstm":
-    from models.aelstm import AELSTMLit as model
-elif model_name=="tranad":
-    from models.tranad import TranADLit as model
-elif model_name=="lstm":
-    from models.lstm import LSTMLit as model
-elif model_name=="fedformer":
-    from models.fedformer import FEDformerLit as model
-elif model_name=="patchad":
-    from models.patchad import PatchADLit as model
-elif model_name=="doc":
-    from models.doc import DOCLit as model
-elif model_name=="anotrans":
-    from models.anotrans import AnomalyTransformerLit as model
-elif model_name=="dcdetector":
-    from models.dcdetector import DCDetectorLit as model
-elif model_name=="drocc":
-    from models.drocc import DROCCLit as model
-elif model_name=="patchtst":
-    from models.patchtst import PatchTSTLit as model
-elif model_name=="usad":
-    from models.usad import USADLit as model
-elif model_name=="madgan":
-    from models.madgan import MADGANLit as model
-
-
-@hydra.main(version_base=None, config_path=f"conf/{model_name}", config_name="config")
+@hydra.main(version_base=None, config_path=f"conf", config_name="config")
 def main(cfg: DictConfig):
 
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -55,8 +26,37 @@ def main(cfg: DictConfig):
     print(f"---------")
     OmegaConf.set_struct(cfg, False)
 
-    config = cfg.dataset
-    dataset = config.name
+    model_name = cfg.model.name
+    dataset = cfg.dataset.name
+    config = cfg.dataset_model
+    
+
+    if model_name=="patchtrad":
+        from models.patchtrad import PatchTradLit as model
+    elif model_name=="aelstm":
+        from models.aelstm import AELSTMLit as model
+    elif model_name=="tranad":
+        from models.tranad import TranADLit as model
+    elif model_name=="lstm":
+        from models.lstm import LSTMLit as model
+    elif model_name=="fedformer":
+        from models.fedformer import FEDformerLit as model
+    elif model_name=="patchad":
+        from models.patchad import PatchADLit as model
+    elif model_name=="doc":
+        from models.doc import DOCLit as model
+    elif model_name=="anotrans":
+        from models.anotrans import AnomalyTransformerLit as model
+    elif model_name=="dcdetector":
+        from models.dcdetector import DCDetectorLit as model
+    elif model_name=="drocc":
+        from models.drocc import DROCCLit as model
+    elif model_name=="patchtst":
+        from models.patchtst import PatchTSTLit as model
+    elif model_name=="usad":
+        from models.usad import USADLit as model
+    elif model_name=="madgan":
+        from models.madgan import MADGANLit as model
 
     av_datasets = ["nyc_taxi", "smd", "smap", "msl", "swat", "ec2_request_latency_system_failure"]
     assert dataset in av_datasets, f"Dataset ({dataset}) should be in {av_datasets}"

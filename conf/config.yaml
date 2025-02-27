@@ -1,7 +1,8 @@
 defaults:
-  - dataset: nyc_taxi
+  - dataset: swat
   - model: madgan
-  
+  - dataset_model: ${model}/${dataset}
+
   - _self_  
   - override hydra/hydra_logging: disabled  
   - override hydra/job_logging: disabled  
@@ -11,4 +12,3 @@ hydra:
   output_subdir: null  
   run:  
     dir: .
-
