@@ -47,7 +47,6 @@ In this repository, we implement several deep learning anomaly detection algorit
 The models we consider are:
 - **LSTM predictive model** 
 - [**USAD**](https://dl.acm.org/doi/10.1145/3394486.3403392)
-- **Transformer predictive model** 
 - [**Deep One-Class Classification**](http://proceedings.mlr.press/v80/ruff18a/ruff18a.pdf)
 - [**MAD-GAN**](https://arxiv.org/abs/1901.04997)
 - **LSTM Auto-Encoders** 
