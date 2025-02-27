@@ -1,1 +1,3 @@
 name: patchtst
+author_github: https://github.com/yuqinie98/PatchTST
+desc: Patch-based transformer for prediction 

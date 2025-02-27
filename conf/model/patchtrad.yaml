@@ -1,1 +1,3 @@
 name: patchtrad
+author_github: https://github.com/vilhess/PatchTrAD
+desc: Patch-based transformer model focusing on patches reconstruction

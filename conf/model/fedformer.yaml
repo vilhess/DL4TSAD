@@ -1,1 +1,3 @@
 name: fedformer
+author_github: https://github.com/MAZiqing/FEDformer
+desc: Transformer predictive model that leverages Fourier transform

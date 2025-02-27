@@ -1,1 +1,2 @@
 name: usad
+desc: Double autoencoders using adversarial training focusing on reconstruction error

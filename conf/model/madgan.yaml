@@ -1,1 +1,3 @@
 name: madgan
+unnoficial_github: https://github.com/Guillem96/madgan-pytorch
+desc: GAN-based model focusing on reconstruction error

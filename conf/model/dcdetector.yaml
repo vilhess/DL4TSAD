@@ -1,1 +1,3 @@
 name: dcdetector
+author_github: https://github.com/DAMO-DI-ML/KDD2023-DCdetector
+desc: a patch transformer based model focusing on association discrepancy

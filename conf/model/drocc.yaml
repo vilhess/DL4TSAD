@@ -1,1 +1,3 @@
 name: drocc
+author_github: https://github.com/microsoft/EdgeML/tree/master
+desc: uses adversarial training to generate fake windows, then uses a basic classifier

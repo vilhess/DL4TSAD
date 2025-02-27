@@ -1,1 +1,2 @@
 name: aelstm
+desc: an lstm-based autoencoder focusing on reconstruction error to detect anomalies

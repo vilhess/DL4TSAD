@@ -1,1 +1,3 @@
 name: anotrans
+author_github: https://github.com/thuml/Anomaly-Transformer
+desc: a transformer based model focusing on association discrepancy
