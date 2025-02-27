@@ -1,0 +1,12 @@
+name: msl
+
+bs: 128
+ws: 99
+in_dim: 55
+
+epochs: 20
+lr: 1e-4
+hid_size: 128
+num_layers: 4
+bidir: True
+revin: True

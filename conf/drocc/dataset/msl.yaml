@@ -1,0 +1,17 @@
+name: msl
+
+bs: 128
+ws: 99
+in_dim: 55
+
+epochs: 20
+lr: 1e-4
+lam: 1
+radius: 8
+gamma: 2
+ce_epochs: 0
+step_size: 1e-3
+num_steps: 50
+hid_size: 256
+num_layers: 2
+bidir: True

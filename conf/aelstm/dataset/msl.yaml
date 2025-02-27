@@ -1,0 +1,10 @@
+name: msl
+
+bs: 128
+ws: 99
+in_dim: 55
+
+epochs: 5
+lr: 1e-4
+hid_size: 256
+latent_dim: 64

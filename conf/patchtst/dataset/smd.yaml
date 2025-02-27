@@ -1,0 +1,17 @@
+name: smd
+
+bs: 128
+ws: 99
+in_dim: 38
+
+epochs: 20
+lr: 1e-4
+e_layers: 3
+n_heads: 16
+d_model: 256
+d_ff: 512
+patch_len: 8
+stride: 6
+kernel_size: 25
+pct_start: 0.3
+revin: 1

@@ -1,0 +1,12 @@
+name: smap
+
+bs: 128
+ws: 99
+in_dim: 25
+
+epochs: 30
+lr: 1e-4
+hid_size: 128
+num_layers: 4
+bidir: True
+revin: True

@@ -1,0 +1,13 @@
+name: nyc_taxi
+
+bs: 256
+ws: 31
+in_dim: 1
+
+epochs: 50
+lr: 1e-4
+hid_size: 128
+latent_dim: 32
+num_layers: 2
+bidir: True
+wd: 1e-6

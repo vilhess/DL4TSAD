@@ -1,0 +1,17 @@
+name: nyc_taxi
+
+bs: 256
+ws: 31
+in_dim: 1
+
+epochs: 20
+lr: 1e-4
+e_layers: 3
+n_heads: 16
+d_model: 128
+d_ff: 256
+patch_len: 16
+stride: 8
+kernel_size: 25
+pct_start: 0.3
+revin: 1

@@ -1,0 +1,1 @@
+{"nyc_taxi": {"fedformer": 0.6673, "patchtrad": 0.6607, "aelstm": 0.6615, "tranad": 0.5518, "lstm": 0.6639, "patchad": 0.7454, "doc": 0.4875, "drocc": 0.4343, "anotrans": 0.6738, "dcdetector": 0.3555, "patchtst": 0.6609, "usad": 0.6801, "madgan": 0.749}, "ec2_request_latency_system_failure": {"fedformer": 0.999}}

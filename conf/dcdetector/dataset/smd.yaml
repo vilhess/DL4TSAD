@@ -1,0 +1,13 @@
+name: smd
+
+bs: 128
+ws: 99
+in_dim: 38
+
+epochs: 3
+lr: 1e-4
+patch_sizes: [5, 10]
+d_model: 100
+e_layers: 1
+dp: 0.
+n_heads: 16

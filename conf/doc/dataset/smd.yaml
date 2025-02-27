@@ -1,0 +1,13 @@
+name: smd
+
+bs: 128
+ws: 99
+in_dim: 38
+
+epochs: 10
+lr: 1e-4
+hid_size: 256
+latent_dim: 32
+num_layers: 4
+bidir: True
+wd: 1e-6

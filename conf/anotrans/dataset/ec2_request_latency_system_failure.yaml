@@ -1,0 +1,14 @@
+name: ec2_request_latency_system_failure
+
+bs: 256
+ws: 31
+in_dim: 1
+
+epochs: 20
+lr: 1e-4
+K: 3
+d_model: 64
+n_heads: 16
+e_layers: 3
+d_ff: 256
+dp: 0.

@@ -1,0 +1,14 @@
+name: smd
+
+bs: 128
+ws: 99
+in_dim: 38
+
+epochs: 3
+lr: 1e-4
+K: 3
+d_model: 64
+n_heads: 16
+e_layers: 3
+d_ff: 256
+dp: 0.

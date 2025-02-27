@@ -1,0 +1,8 @@
+name: swat
+
+bs: 128
+ws: 99
+in_dim: 51
+
+epochs: 5
+lr: 1e-4

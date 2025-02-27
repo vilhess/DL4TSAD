@@ -1,0 +1,11 @@
+name: smap
+
+bs: 128
+ws: 99
+in_dim: 25
+
+epochs: 20
+lr: 1e-4
+latent_dim: 100
+alpha: 0.5
+beta: 0.5

@@ -1,0 +1,13 @@
+name: ec2_request_latency_system_failure
+
+bs: 256
+ws: 31
+in_dim: 1
+
+epochs: 150
+lr: 1e-4
+hid_size: 128
+latent_dim: 64
+num_layers: 1
+bidir: False
+wd: 1e-6

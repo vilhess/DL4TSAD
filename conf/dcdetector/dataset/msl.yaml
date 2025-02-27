@@ -1,0 +1,13 @@
+name: msl
+
+bs: 128
+ws: 99
+in_dim: 55
+
+epochs: 3
+lr: 1e-4
+patch_sizes: [4, 5]
+d_model: 256
+e_layers: 3
+dp: 0.
+n_heads: 16

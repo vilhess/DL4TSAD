@@ -1,0 +1,16 @@
+name: smd
+
+bs: 128
+ws: 99
+in_dim: 38
+
+epochs: 3
+lr: 1e-4
+e_layers: 2
+patch_sizes: [5, 10]
+dp: 0.1
+act: relu
+out_attn: True
+d_model: 128
+patch_mx: 0.1
+beta: 0
