@@ -67,33 +67,29 @@ The models we consider are:
 To train a given model on a specified dataset, use the following command:
 
 ```python 
-python -m trainers.<model_name>.py dataset=<dataset_name>
+python main.py dataset=<dataset_name> model=<model_name>
 ``` 
 
-where `<dataset_name>` can be one of the following:  
+where `<dataset_name>` and `<model_name>` can be one of the following:  
 
-- `nyc_taxi`  
-- `ec2_request_latency_system_failure`  
-- `smd`  
-- `smap`  
-- `msl`  
-- `swat`  
 
-and `<model_name>` can be one of the following:  
+| Models       | Datasets               |
+|-------------|------------------------|
+| `aelstm`     | `nyc_taxi`            |
+| `anotrans`   | `ec2_request_latency_system_failure` |
+| `dcdetector` | `smd`                 |
+| `doc`        | `smap`                |
+| `drocc`      | `msl`                 |
+| `fedformer`  | `swat`                |
+| `lstm`       |                        |
+| `madgan`     |                        |
+| `patchad`    |                        |
+| `patchtrad`  |                        |
+| `patchtst`   |                        |
+| `tranad`     |                        |
+| `usad`       |                        |
 
-- `aelstm`  
-- `anotrans`  
-- `dcdetector`  
-- `doc`  
-- `drocc`  
-- `fedformer`  
-- `lstm`  
-- `madgan`  
-- `patchad`  
-- `patchtrad`  
-- `patchtst`  
-- `tranad` 
-- `usad`  
+
 
 ---
 
