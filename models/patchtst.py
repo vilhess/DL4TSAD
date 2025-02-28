@@ -536,4 +536,4 @@ class PatchTSTLit(L.LightningModule):
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, pct_start=self.pct_start, epochs=self.epoch, max_lr=self.lr, steps_per_epoch=self.len_loader)
-        return {"optimizer": optimizer, "scheduler": scheduler}
+        return {"optimizer": optimizer, "lr_scheduler": scheduler}

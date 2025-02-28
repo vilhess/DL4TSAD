@@ -49,8 +49,8 @@ def get_loaders(root_dir="data", window_size=10, batch_size=32):
     trainset = Swat(mode="train", window_size=window_size, root=root_dir)
     testset = Swat(mode="test", window_size=window_size, root=root_dir)
 
-    trainloader = DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=1)
-    testloader = DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=1)
+    trainloader = DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=21)
+    testloader = DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=21)
 
     return trainloader, testloader
 

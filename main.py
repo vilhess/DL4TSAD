@@ -81,8 +81,8 @@ def main(cfg: DictConfig):
         LitModel = model(config)
         if model_name=="doc":
             LitModel.init_center(trainloader)
-        #trainer = L.Trainer(max_epochs=config.epochs, logger=False, enable_checkpointing=False)
-        trainer = L.Trainer(max_epochs=1, logger=False, enable_checkpointing=False, fast_dev_run=True)
+        trainer = L.Trainer(max_epochs=config.epochs, logger=False, enable_checkpointing=False)
+        #trainer = L.Trainer(max_epochs=1, logger=False, enable_checkpointing=False, fast_dev_run=True)
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
             
         
