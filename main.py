@@ -56,6 +56,8 @@ def main(cfg: DictConfig):
         from models.usad import USADLit as model
     elif model_name=="madgan":
         from models.madgan import MADGANLit as model
+    elif model_name=="fdad":
+        from models.fdad import FDADLit as model
 
     av_datasets = ["nyc_taxi", "smd", "smap", "msl", "swat", "ec2_request_latency_system_failure"]
     assert dataset in av_datasets, f"Dataset ({dataset}) should be in {av_datasets}"
