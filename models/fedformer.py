@@ -373,6 +373,7 @@ class FEDformerLit(L.LightningModule):
         target = x[:,-1,:]
         pred = self.model(inputs)
         loss = self.criterion(pred.squeeze(1), target)
+        self.log("train_loss", loss)
         return loss
     
     def configure_optimizers(self):

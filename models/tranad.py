@@ -128,6 +128,7 @@ class TranADLit(L.LightningModule):
         x1, x2 = self.model(x, elem)
         loss = 1/(epoch+1) * self.criterion(elem, x1) + (1 - 1/(epoch+1)) * self.criterion(elem, x2)
         loss = torch.mean(loss)
+        self.log("train_loss", loss)
         return loss
 
     def configure_optimizers(self):

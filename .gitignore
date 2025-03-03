@@ -6,5 +6,6 @@
 *.DS_Store
 *checkpoints/
 *.ipynb
+wandb/
 
 !requirements.txt

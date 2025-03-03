@@ -712,6 +712,7 @@ class PatchADLit(L.LightningModule):
 
         loss_mse = self.criterion(recx, x)
         loss += loss_mse*10  
+        self.log("train_loss", loss)
         return loss
     
     def configure_optimizers(self):

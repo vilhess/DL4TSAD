@@ -85,6 +85,7 @@ class AELSTMLit(L.LightningModule):
         x, _ = batch
         reconstructed = self.model(x)
         loss = self.criterion(reconstructed, x[:, -1, :])
+        self.log("train_loss", loss)
         return loss
 
     def configure_optimizers(self):

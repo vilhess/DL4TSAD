@@ -249,6 +249,7 @@ class AnomalyTransformerLit(L.LightningModule):
         metric = metric * loss
         metric = metric[:, -1]
         loss = metric.detach().cpu()
+        self.log("train_loss", loss)
         return loss
 
     def configure_optimizers(self):

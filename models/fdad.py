@@ -200,7 +200,9 @@ class FDADLit(L.LightningModule):
     def training_step(self, batch, batch_idx):
         x, _ = batch
         reconstructed = self.model(x)
-        return F.mse_loss(x, reconstructed, reduction="mean")
+        loss = F.mse_loss(x, reconstructed, reduction="mean")
+        self.log("train_loss", loss)
+        return loss
 
     def configure_optimizers(self):
         optimizer = optim.Adam(self.parameters(), lr=self.lr)

@@ -304,6 +304,7 @@ class DCDetectorLit(L.LightningModule):
         metric = torch.softmax(loss, dim=-1)
         metric = metric[:, -1]
         errors = metric.detach().cpu()
+        self.log("train_loss", errors)
         return errors
 
     def configure_optimizers(self):

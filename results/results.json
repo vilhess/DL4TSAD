@@ -1,1 +1,1 @@
-{"nyc_taxi": {"fdad": 0.467}}
+{"nyc_taxi": {"fdad": 0.467, "patchtrad": 0.9222}, "ec2_request_latency_system_failure": {"patchtrad": 0.9987}, "swat": {"patchtrad": 0.8446}}

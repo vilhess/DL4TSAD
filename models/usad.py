@@ -70,7 +70,8 @@ class USADLit(L.LightningModule):
         optim2.zero_grad()
         self.manual_backward(loss2)
         optim2.step()
-    
+        self.log(f"loss1: {loss1}, loss2: {loss2}")
+
     def configure_optimizers(self):
         optim1 = torch.optim.Adam(list(self.enc.parameters()) + list(self.dec1.parameters()), lr=self.lr)
         optim2 = torch.optim.Adam(list(self.enc.parameters()) + list(self.dec2.parameters()), lr=self.lr)

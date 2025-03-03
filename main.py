@@ -2,6 +2,8 @@ import torch
 from sklearn.metrics import roc_auc_score
 import numpy as np
 import lightning as L
+import wandb
+from pytorch_lightning.loggers import WandbLogger
 import hydra
 from omegaconf import DictConfig, OmegaConf
 from tqdm import tqdm
@@ -12,6 +14,8 @@ from dataset.smd import get_loaders as get_smd_loaders, machines
 from dataset.swat import get_loaders as get_swat_loaders
 
 from utils import save_results
+
+torch.multiprocessing.set_sharing_strategy('file_system')
 
 
 @hydra.main(version_base=None, config_path=f"conf", config_name="config")
@@ -71,7 +75,9 @@ def main(cfg: DictConfig):
         loaders = [get_smd_loaders(window_size=config.ws, root_dir="data/smd/processed", machine=m, batch_size=config.bs) for m in machines]
     elif dataset == "swat":
         loaders = [get_swat_loaders(window_size=config.ws, root_dir="data/swat", batch_size=config.bs)]
-    
+
+    wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}")
+
     aucs = []
     
     for i, (trainloader, testloader) in enumerate(loaders):
@@ -83,10 +89,9 @@ def main(cfg: DictConfig):
         LitModel = model(config)
         if model_name=="doc":
             LitModel.init_center(trainloader)
-        trainer = L.Trainer(max_epochs=config.epochs, logger=False, enable_checkpointing=False)
+        trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1)
         #trainer = L.Trainer(max_epochs=1, logger=False, enable_checkpointing=False, fast_dev_run=True)
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
-            
         
         test_errors = []
         test_labels = []
@@ -115,6 +120,9 @@ def main(cfg: DictConfig):
     final_auc = np.mean(aucs)
     print(f"Final AUC: {final_auc}")
     save_results(filename="results/results.json", dataset=dataset, model=model_name, auc=round(final_auc, 4))
+
+    wandb_logger.experiment.config["final_auc"] = final_auc
+    wandb.finish()
 
 if __name__ == "__main__":
     main()

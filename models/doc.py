@@ -56,6 +56,7 @@ class DOCLit(L.LightningModule):
         proj = self.model(x)
         dist = torch.sum((proj - self.center.to(proj.device)) ** 2, dim=1)
         loss = torch.mean(dist)
+        self.log("train_loss", loss)
         return loss
     
     def configure_optimizers(self):
