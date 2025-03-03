@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define datasets to iterate over
-datasets=("nyc_taxi" "ec2_request_latency_system_failure" "swat" "msl" "smap" "smd")
+datasets=("nyc_taxi" "ec2_request_latency_system_failure" "msl" "swat" "smap" "smd")
 
 for DATASET in "${datasets[@]}"; do
     echo "Running experiments on dataset: $DATASET"
@@ -16,7 +16,6 @@ for DATASET in "${datasets[@]}"; do
         ["LSTM"]="python main.py dataset=$DATASET model=lstm"
         ["MADGAN"]="python main.py dataset=$DATASET model=madgan"
         ["TRANAD"]="python main.py dataset=$DATASET model=tranad"
-        ["TRANSAM"]="python main.py dataset=$DATASET model=transam"
         ["PATCHTRAD"]="python main.py dataset=$DATASET model=patchtrad"
         ["DCDETECTOR"]="python main.py dataset=$DATASET model=dcdetector"
         ["ANOTRANS"]="python main.py dataset=$DATASET model=anotrans"
@@ -24,7 +23,7 @@ for DATASET in "${datasets[@]}"; do
     )
 
     # Define an array to specify the execution order
-    order=("AELSTM" "DOC" "PatchTST" "USAD" "DROCC" "LSTM" "MADGAN" "TRANAD" "TRANSAM" "PATCHTRAD" "DCDETECTOR" "ANOTRANS" "PATCHAD")
+    order=("AELSTM" "DOC" "PatchTST" "USAD" "LSTM" "TRANAD" "PATCHTRAD" "PATCHAD" "DCDETECTOR" "ANOTRANS" "MADGAN" "DROCC")
 
     # Loop through each model in the specified order
     for model in "${order[@]}"; do

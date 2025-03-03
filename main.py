@@ -116,6 +116,8 @@ def main(cfg: DictConfig):
         auc = roc_auc_score(y_true=test_labels, y_score=test_scores)
         print(f"AUC: {auc}")
         aucs.append(auc)
+
+        wandb_logger.experiment.config[f"auc_subset_{i+1}/{len(loaders)}"] = auc
     
     final_auc = np.mean(aucs)
     print(f"Final AUC: {final_auc}")
