@@ -93,7 +93,7 @@ def main(cfg: DictConfig):
         LitModel.eval()
 
         with torch.no_grad():
-            pbar = tqdm(testloader, desc="Detection Pahse")
+            pbar = tqdm(testloader, desc="Detection Phase")
             for x, anomaly in pbar:
                 x = x.to(DEVICE)
                 errors = LitModel.get_loss(x, mode="test")

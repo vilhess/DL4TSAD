@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define datasets to iterate over
-datasets=("nyc_taxi" "ec2" "swat" "msl" "smap" "smd")
+datasets=("nyc_taxi" "ec2_request_latency_system_failure" "swat" "msl" "smap" "smd")
 
 for DATASET in "${datasets[@]}"; do
     echo "Running experiments on dataset: $DATASET"
