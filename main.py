@@ -13,6 +13,7 @@ from dataset.nasa import get_loaders as get_nasa_loaders, smapfiles, mslfiles
 from dataset.smd import get_loaders as get_smd_loaders, machines
 from dataset.swat import get_loaders as get_swat_loaders
 
+from eval.get_metric import get_metrics
 from utils import save_results
 
 torch.multiprocessing.set_sharing_strategy('file_system')
@@ -60,8 +61,6 @@ def main(cfg: DictConfig):
         from models.usad import USADLit as model
     elif model_name=="madgan":
         from models.madgan import MADGANLit as model
-    elif model_name=="fdad":
-        from models.fdad import FDADLit as model
 
     av_datasets = ["nyc_taxi", "smd", "smap", "msl", "swat", "ec2_request_latency_system_failure"]
     assert dataset in av_datasets, f"Dataset ({dataset}) should be in {av_datasets}"
@@ -78,7 +77,7 @@ def main(cfg: DictConfig):
 
     wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}")
 
-    aucs = []
+    aucs, f1_spots, f1_dspots, f1_spot_adjusteds, f1_dspot_adjusteds = [], [], [], [], []
     
     for i, (trainloader, testloader) in enumerate(loaders):
         torch.manual_seed(0)
@@ -112,18 +111,45 @@ def main(cfg: DictConfig):
         test_labels = torch.cat(test_labels).detach().cpu()
 
         test_scores = -test_errors
-        
-        auc = roc_auc_score(y_true=test_labels, y_score=test_scores)
-        print(f"AUC: {auc}")
-        aucs.append(auc)
 
-        wandb_logger.experiment.config[f"auc_subset_{i+1}/{len(loaders)}"] = auc
+        results = get_metrics(test_labels, test_scores)
+        print(f"Results: {results}")
+
+        aucs.append(results["auc"])
+        f1_spots.append(results["f1_spot"])
+        f1_dspots.append(results["f1_dspot"])
+        f1_spot_adjusteds.append(results["f1_spot_adjusted"])
+        f1_dspot_adjusteds.append(results["f1_dspot_adjusted"])
+
+        wandb_logger.experiment.config[f"auc_subset_{i+1}/{len(loaders)}"] = results["auc"]
+        wandb_logger.experiment.config[f"f1_spot_subset_{i+1}/{len(loaders)}"] = results["f1_spot"]
+        wandb_logger.experiment.config[f"f1_dspot_subset_{i+1}/{len(loaders)}"] = results["f1_dspot"]
+        wandb_logger.experiment.config[f"f1_spot_adjusted_subset_{i+1}/{len(loaders)}"] = results["f1_spot_adjusted"]
+        wandb_logger.experiment.config[f"f1_dspot_adjusted_subset_{i+1}/{len(loaders)}"] = results["f1_dspot_adjusted"]
     
     final_auc = np.mean(aucs)
+    final_spot = np.mean(f1_spots)
+    final_dspot = np.mean(f1_dspots)
+    final_spot_adjusted = np.mean(f1_spot_adjusteds)
+    final_dspot_adjusted = np.mean(f1_dspot_adjusteds)
+
     print(f"Final AUC: {final_auc}")
-    save_results(filename="results/results.json", dataset=dataset, model=model_name, auc=round(final_auc, 4))
+    print(f"Final F1-Spot: {final_spot}")
+    print(f"Final F1-DSpot: {final_dspot}")
+    print(f"Final F1-Spot-Adjusted: {final_spot_adjusted}")
+    print(f"Final F1-DSpot-Adjusted: {final_dspot_adjusted}")
+
+    save_results(filename="results/aucs.json", dataset=dataset, model=model_name, score=round(final_auc, 4))
+    save_results(filename="results/f1_spots.json", dataset=dataset, model=model_name, score=round(final_spot, 4))
+    save_results(filename="results/f1_dspots.json", dataset=dataset, model=model_name, score=round(final_dspot, 4))
+    save_results(filename="results/f1_spot_adjusteds.json", dataset=dataset, model=model_name, score=round(final_spot_adjusted, 4))
+    save_results(filename="results/f1_dspot_adjusteds.json", dataset=dataset, model=model_name, score=round(final_dspot_adjusted, 4))
 
     wandb_logger.experiment.config["final_auc"] = final_auc
+    wandb_logger.experiment.config["final_spot"] = final_spot
+    wandb_logger.experiment.config["final_dspot"] = final_dspot
+    wandb_logger.experiment.config["final_spot_adjusted"] = final_spot_adjusted
+    wandb_logger.experiment.config["final_dspot_adjusted"] = final_dspot_adjusted
     wandb.finish()
 
 if __name__ == "__main__":
