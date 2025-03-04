@@ -60,6 +60,7 @@ The models we consider are:
 - [**USAD**](https://dl.acm.org/doi/10.1145/3394486.3403392) 
 - [**MADGAN**](https://arxiv.org/abs/1901.04997) - [GitHub: madgan-pytorch](https://github.com/Guillem96/madgan-pytorch)
 
+We slightly edited the model's code from the original GitHub repository to make it work on our project. We follow the PyTorch Lightning framework.
 
 --- 
 
@@ -91,7 +92,6 @@ where `<dataset_name>`, `<model_name>` and `<method_name>` can be one of the fol
 | `usad`       |                        |        |
 
 
-
 ---
 
 ## Testing 
@@ -100,4 +100,4 @@ During the testing phase, we evaluate the model's performance using ROC-AUC and 
 
 ## Configurations
 
-For each dataset and each model, the configurations can be view and edit in the ```conf/``` directory, following the [hydra](https://hydra.cc/) framework. 
+For each dataset and each model, the configurations can be view and edit in the ```conf/``` directory, following the [hydra](https://hydra.cc/) framework.
