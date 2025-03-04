@@ -68,31 +68,35 @@ The models we consider are:
 To train a given model on a specified dataset, use the following command:
 
 ```python 
-python main.py dataset=<dataset_name> model=<model_name>
+python main.py dataset=<dataset_name> model=<model_name> method=<method_name>
 ``` 
 
-where `<dataset_name>` and `<model_name>` can be one of the following:  
+where `<dataset_name>`, `<model_name>` and `<method_name>` can be one of the following:  
 
 
-| Models       | Datasets               |
-|-------------|------------------------|
-| `aelstm`     | `nyc_taxi`            |
-| `anotrans`   | `ec2_request_latency_system_failure` |
-| `dcdetector` | `smd`                 |
-| `doc`        | `smap`                |
-| `drocc`      | `msl`                 |
-| `fedformer`  | `swat`                |
-| `lstm`       |                        |
-| `madgan`     |                        |
-| `patchad`    |                        |
-| `patchtrad`  |                        |
-| `patchtst`   |                        |
-| `tranad`     |                        |
-| `usad`       |                        |
+| Models       | Datasets               | Method  
+|-------------|------------------------|----------
+| `aelstm`     | `nyc_taxi`            |`spot`  |
+| `anotrans`   | `ec2_request_latency_system_failure` |`dspot`|  
+| `dcdetector` | `smd`                 |        |
+| `doc`        | `smap`                |        |
+| `drocc`      | `msl`                 |        |
+| `fedformer`  | `swat`                |        |
+| `lstm`       |                        |        |
+| `madgan`     |                        |        |
+| `patchad`    |                        |        |
+| `patchtrad`  |                        |        |
+| `patchtst`   |                        |        |
+| `tranad`     |                        |        |
+| `usad`       |                        |        |
 
 
 
 ---
+
+## Testing 
+
+During the testing phase, we evaluate the model's performance using ROC-AUC and F1 scores. For anomaly detection, we employ adaptive thresholding based on techniques from [Anomaly Detection in Streams with Extreme Value Theory](https://hal.science/hal-01640325/document). Both `SPOT` and `DSPOT` methods are available.
 
 ## Configurations
 
