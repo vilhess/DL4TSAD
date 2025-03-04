@@ -1,5 +1,4 @@
 import torch
-from sklearn.metrics import roc_auc_score
 import numpy as np
 import lightning as L
 import wandb
@@ -34,8 +33,8 @@ def main(cfg: DictConfig):
     dataset = cfg.dataset.name
     config = cfg.dataset_model
     method = cfg.method.name
+    threshold = cfg.dataset.threshold
     
-
     if model_name=="patchtrad":
         from models.patchtrad import PatchTradLit as model
     elif model_name=="aelstm":
@@ -111,16 +110,16 @@ def main(cfg: DictConfig):
         test_errors = torch.cat(test_errors).detach().cpu()
         test_labels = torch.cat(test_labels).detach().cpu()
 
-        results = get_metrics(test_labels, test_errors, method=method)
+        results = get_metrics(test_labels, test_errors, return_f1=False, method=method, threshold=threshold)
         print(f"Results: {results}")
 
         aucs.append(results["auc"])
-        f1.append(results["f1"])
-        f1_adjusted.append(results["f1_adjusted"])
+        #f1.append(results["f1"])
+        #f1_adjusted.append(results["f1_adjusted"])
 
         wandb_logger.experiment.config[f"auc_subset_{i+1}/{len(loaders)}"] = results["auc"]
-        wandb_logger.experiment.config[f"f1_subset_{i+1}/{len(loaders)}_{method}"] = results["f1"]
-        wandb_logger.experiment.config[f"f1_adjusted_subset_{i+1}/{len(loaders)}_{method}"] = results["f1_adjusted"]
+        #wandb_logger.experiment.config[f"f1_subset_{i+1}/{len(loaders)}_{method}"] = results["f1"]
+        #wandb_logger.experiment.config[f"f1_adjusted_subset_{i+1}/{len(loaders)}_{method}"] = results["f1_adjusted"]
     
     final_auc = np.mean(aucs)
     final_f1 = np.mean(f1)
@@ -131,12 +130,12 @@ def main(cfg: DictConfig):
     print(f"Final F1-Adjusted: {final_adjusted}")
 
     save_results(filename="results/aucs.json", dataset=dataset, model=f"{model_name}", score=round(final_auc, 4))
-    save_results(filename="results/f1.json", dataset=dataset, model=f"{model_name}_{method}", score=round(final_f1, 4))
-    save_results(filename="results/f1_adjusted.json", dataset=dataset, model=f"{model_name}_{method}", score=round(final_adjusted, 4))
+    #save_results(filename="results/f1.json", dataset=dataset, model=f"{model_name}_{method}", score=round(final_f1, 4))
+    #save_results(filename="results/f1_adjusted.json", dataset=dataset, model=f"{model_name}_{method}", score=round(final_adjusted, 4))
 
     wandb_logger.experiment.config["final_auc"] = final_auc
-    wandb_logger.experiment.config[f"final_f1_{method}"] = final_f1
-    wandb_logger.experiment.config[f"final_f1_adjusted_{method}"] = final_adjusted
+    #wandb_logger.experiment.config[f"final_f1_{method}"] = final_f1
+    #wandb_logger.experiment.config[f"final_f1_adjusted_{method}"] = final_adjusted
     wandb.finish()
 
 if __name__ == "__main__":
