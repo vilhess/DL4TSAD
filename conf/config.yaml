@@ -2,6 +2,7 @@ defaults:
   - dataset: swat
   - model: madgan
   - dataset_model: ${model}/${dataset}
+  - method: spot
 
   - _self_  
   - override hydra/hydra_logging: disabled  

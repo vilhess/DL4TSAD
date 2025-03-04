@@ -43,7 +43,7 @@ class DROCCLit(L.LightningModule):
         ce_loss = F.binary_cross_entropy_with_logits(logits, target)
         if self.current_epoch >= self.only_ce_epochs:
             x = x.detach()
-            x = x[target==1]
+            x = x[target==0]
             adv_loss = self.one_class_adv_loss(x)
             loss = ce_loss + adv_loss * self.lamda
         else:
@@ -52,7 +52,7 @@ class DROCCLit(L.LightningModule):
         return loss
     
     def get_loss(self, x, mode=None):
-        return -torch.sigmoid(self.model(x))
+        return torch.sigmoid(self.model(x))
     
     def one_class_adv_loss(self, x_train_data):
         batch_size = len(x_train_data)
@@ -91,7 +91,7 @@ class DROCCLit(L.LightningModule):
 
         adv_pred = self.model(x_adv_sampled)
         adv_pred = torch.squeeze(adv_pred, dim=1)
-        adv_loss = F.binary_cross_entropy_with_logits(adv_pred, (new_targets * 0))
+        adv_loss = F.binary_cross_entropy_with_logits(adv_pred, (new_targets+1))
 
         return adv_loss
     
