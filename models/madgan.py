@@ -99,6 +99,8 @@ class MADGANLit(L.LightningModule):
         loss_disc_fake = F.binary_cross_entropy_with_logits(pred_disc_fake, ones)
         self.manual_backward(loss_disc_fake)
         self.manual_backward(loss_disc_true)
+        self.log('loss_disc_fake', loss_disc_fake)
+        self.log('loss_disc_true', loss_disc_true)
         optim_disc.step()
 
         optim_gen.zero_grad()
@@ -106,7 +108,7 @@ class MADGANLit(L.LightningModule):
         loss_gen = F.binary_cross_entropy_with_logits(pred_disc_fake, zeros)
         self.manual_backward(loss_gen)
         optim_gen.step()
-        self.log(f"train_gen_loss: {loss_gen}; train_disc_loss_fake: {loss_disc_fake}; train_disc_loss_true: {loss_disc_true}")
+        self.log('loss_gen', loss_gen)
 
     
     def configure_optimizers(self):

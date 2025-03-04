@@ -285,6 +285,11 @@ class DCDetectorLit(L.LightningModule):
         prior_loss=prior_loss/len(prior)
 
         loss = prior_loss - series_loss
+
+        self.log('train_loss', loss)
+        self.log('train_series_loss', series_loss)
+        self.log('train_prior_loss', prior_loss)
+    
         return loss
 
     def get_loss(self, x, mode=None):
@@ -304,7 +309,6 @@ class DCDetectorLit(L.LightningModule):
         metric = torch.softmax(loss, dim=-1)
         metric = metric[:, -1]
         errors = metric.detach().cpu()
-        self.log("train_loss", errors)
         return errors
 
     def configure_optimizers(self):

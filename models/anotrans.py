@@ -221,6 +221,12 @@ class AnomalyTransformerLit(L.LightningModule):
 
         self.manual_backward(loss1, retain_graph=True)
         self.manual_backward(loss2, retain_graph=True)
+        
+        self.log("rec_loss", rec_loss)
+        self.log("series_loss", series_loss)
+        self.log("prior_loss", prior_loss)
+        self.log("loss1", loss1)
+        self.log("loss2", loss2)    
 
         opt.step()
 
@@ -249,7 +255,6 @@ class AnomalyTransformerLit(L.LightningModule):
         metric = metric * loss
         metric = metric[:, -1]
         loss = metric.detach().cpu()
-        self.log("train_loss", loss)
         return loss
 
     def configure_optimizers(self):

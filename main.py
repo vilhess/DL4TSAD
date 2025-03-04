@@ -122,12 +122,12 @@ def main(cfg: DictConfig):
         #wandb_logger.experiment.config[f"f1_adjusted_subset_{i+1}/{len(loaders)}_{method}"] = results["f1_adjusted"]
     
     final_auc = np.mean(aucs)
-    final_f1 = np.mean(f1)
-    final_adjusted = np.mean(f1_adjusted)
+    #final_f1 = np.mean(f1)
+    #final_adjusted = np.mean(f1_adjusted)
 
     print(f"Final AUC: {final_auc}")
-    print(f"Final F1: {final_f1}")
-    print(f"Final F1-Adjusted: {final_adjusted}")
+    #print(f"Final F1: {final_f1}")
+    #print(f"Final F1-Adjusted: {final_adjusted}")
 
     save_results(filename="results/aucs.json", dataset=dataset, model=f"{model_name}", score=round(final_auc, 4))
     #save_results(filename="results/f1.json", dataset=dataset, model=f"{model_name}_{method}", score=round(final_f1, 4))

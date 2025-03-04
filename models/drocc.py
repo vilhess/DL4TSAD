@@ -48,7 +48,9 @@ class DROCCLit(L.LightningModule):
             loss = ce_loss + adv_loss * self.lamda
         else:
             loss = ce_loss
-        self.log("train_loss", loss)
+        self.log('train_loss', loss)
+        self.log('ce_loss', ce_loss)
+        self.log('adv_loss', adv_loss)
         return loss
     
     def get_loss(self, x, mode=None):
