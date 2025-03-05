@@ -66,5 +66,5 @@ class DOCLit(L.LightningModule):
     
     def get_loss(self, x, mode=None):
         proj = self.model(x)
-        dist = torch.sum((proj - self.center) ** 2, dim=1)
+        dist = torch.sum((proj - self.center.to(proj.device)) ** 2, dim=1)
         return dist
