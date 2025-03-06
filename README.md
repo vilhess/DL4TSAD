@@ -9,7 +9,7 @@ In this repository, we implement several deep learning anomaly detection algorit
 ### Univariate
 
 > **NYC Taxi Demand Dataset** The dataset should be placed in the root directory under `data/nab`.    
-> **EC2 Request Dataset** The dataset should be placed in the root directory under `data/nab`.    
+> **EC2 Request Latency System Failure Dataset** The dataset should be placed in the root directory under `data/nab`.    
 
 - These two datasets are sourced from the Numenta Anomaly Benchmark (NAB) and can be accessed [here](https://github.com/numenta/NAB/).
 
