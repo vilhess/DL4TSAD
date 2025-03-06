@@ -25,7 +25,7 @@ for DATASET in "${datasets[@]}"; do
     )
 
     # Define an array to specify the execution order
-    order=("AELSTM" "DOC" "PatchTST" "USAD" "LSTM" "TRANAD" "PATCHTRAD" "PATCHAD" "DCDETECTOR" "ANOTRANS" "MADGAN" "DROCC")
+    order=("AELSTM" "DOC" "PatchTST" "USAD" "LSTM" "TRANAD" "PATCHTRAD" "PATCHAD" "ANOTRANS" "DCDETECTOR" "MADGAN" "DROCC")
 
     # Loop through each model in the specified order
     for model in "${order[@]}"; do
