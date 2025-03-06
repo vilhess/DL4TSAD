@@ -129,9 +129,9 @@ def main(cfg: DictConfig):
     #print(f"Final F1: {final_f1}")
     #print(f"Final F1-Adjusted: {final_adjusted}")
 
-    save_results(filename="results/aucs.json", dataset=dataset, model=f"{model_name}", score=round(final_auc, 4))
-    #save_results(filename="results/f1.json", dataset=dataset, model=f"{model_name}_{method}", score=round(final_f1, 4))
-    #save_results(filename="results/f1_adjusted.json", dataset=dataset, model=f"{model_name}_{method}", score=round(final_adjusted, 4))
+    save_results(filename="results/aucs.json", dataset=dataset, model=f'{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}', score=round(final_auc, 4))
+    #save_results(filename="results/f1.json", dataset=dataset, model=f"{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}_{method}", score=round(final_f1, 4))
+    #save_results(filename="results/f1_adjusted.json", dataset=dataset, model=f"{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}_{method}", score=round(final_adjusted, 4))
 
     wandb_logger.experiment.config["final_auc"] = final_auc
     #wandb_logger.experiment.config[f"final_f1_{method}"] = final_f1

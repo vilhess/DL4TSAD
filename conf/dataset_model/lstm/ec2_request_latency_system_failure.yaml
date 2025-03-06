@@ -9,4 +9,4 @@ lr: 1e-4
 hid_size: 128
 num_layers: 2
 bidir: True
-revin: True
+revin: 1

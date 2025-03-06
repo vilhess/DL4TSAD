@@ -10,10 +10,12 @@ for DATASET in "${datasets[@]}"; do
     declare -A models=(
         ["AELSTM"]="python main.py dataset=$DATASET model=aelstm"
         ["DOC"]="python main.py dataset=$DATASET model=doc"
-        ["PatchTST"]="python main.py dataset=$DATASET model=patchtst"
+        ["PatchTST"]="python main.py dataset=$DATASET model=patchtst" dataset_model.revin = 1
+        ["PatchTST"]="python main.py dataset=$DATASET model=patchtst" dataset_model.revin = 0
         ["USAD"]="python main.py dataset=$DATASET model=usad"
         ["DROCC"]="python main.py dataset=$DATASET model=drocc"
-        ["LSTM"]="python main.py dataset=$DATASET model=lstm"
+        ["LSTM"]="python main.py dataset=$DATASET model=lstm"dataset_model.revin = 1
+        ["LSTM"]="python main.py dataset=$DATASET model=lstm"dataset_model.revin = 0
         ["MADGAN"]="python main.py dataset=$DATASET model=madgan"
         ["TRANAD"]="python main.py dataset=$DATASET model=tranad"
         ["PATCHTRAD"]="python main.py dataset=$DATASET model=patchtrad"

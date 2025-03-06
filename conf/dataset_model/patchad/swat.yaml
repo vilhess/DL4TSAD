@@ -11,6 +11,6 @@ patch_sizes: [5, 10]
 dp: 0.1
 act: relu
 out_attn: True
-d_model: 128
+d_model: 100
 patch_mx: 0.1
 beta: 0
