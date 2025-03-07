@@ -531,7 +531,7 @@ class PatchTSTLit(L.LightningModule):
         inputs = x[:,:-1,:]
         target = x[:,-1,:]
         pred = self.model(inputs)
-        errors = torch.abs(target - pred.squeeze(1))
+        errors = torch.abs(target - pred.squeeze(1)).mean(dim=1)
         return errors
 
     def configure_optimizers(self):

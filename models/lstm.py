@@ -56,5 +56,5 @@ class LSTMLit(L.LightningModule):
         inputs = x[:,:-1,:]
         target = x[:,-1,:]
         pred = self.model(inputs)
-        loss = torch.abs(target - pred.squeeze(1))  
+        loss = torch.abs(target - pred.squeeze(1)).mean(dim=1)
         return loss
