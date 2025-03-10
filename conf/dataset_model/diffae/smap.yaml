@@ -1,0 +1,12 @@
+name: smap
+
+bs: 128
+ws: 99
+in_dim: 25
+
+lr: 1e-4
+epochs: 20
+dims: [25, 50, 100]
+time_dim: 100
+noise_steps: 100
+denoise_steps: 10

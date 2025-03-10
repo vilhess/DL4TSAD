@@ -6,6 +6,7 @@ from pytorch_lightning.loggers import WandbLogger
 import hydra
 from omegaconf import DictConfig, OmegaConf
 from tqdm import tqdm
+import gc
 
 from dataset.nab import get_loaders as get_nab_loaders
 from dataset.nasa import get_loaders as get_nasa_loaders, smapfiles, mslfiles
@@ -61,6 +62,8 @@ def main(cfg: DictConfig):
         from models.usad import USADLit as model
     elif model_name=="madgan":
         from models.madgan import MADGANLit as model
+    elif model_name=="diffae":
+        from models.diffae import FastDiffNetLit as model
 
     av_datasets = ["nyc_taxi", "smd", "smap", "msl", "swat", "ec2_request_latency_system_failure"]
     assert dataset in av_datasets, f"Dataset ({dataset}) should be in {av_datasets}"
@@ -75,7 +78,7 @@ def main(cfg: DictConfig):
     elif dataset == "swat":
         loaders = [get_swat_loaders(window_size=config.ws, root_dir="data/swat", batch_size=config.bs)]
 
-    wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}")
+    #wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}")
 
     aucs, f1, f1_adjusted = [], [], []
     
@@ -87,9 +90,11 @@ def main(cfg: DictConfig):
 
         LitModel = model(config)
         if model_name=="doc":
-            LitModel.init_center(trainloader)
-        trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1)
+            LitModel.init_center(trainloader, device=DEVICE)
+        #trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1)
         #trainer = L.Trainer(max_epochs=1, logger=False, enable_checkpointing=False, fast_dev_run=True)
+        trainer = L.Trainer(max_epochs=config.epochs, logger=False, enable_checkpointing=False, log_every_n_steps=1)
+
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
         
         test_errors = []
@@ -106,6 +111,7 @@ def main(cfg: DictConfig):
 
                 test_labels.append(anomaly)
                 test_errors.append(errors)
+                del x
 
         test_errors = torch.cat(test_errors).detach().cpu()
         test_labels = torch.cat(test_labels).detach().cpu()
@@ -117,13 +123,24 @@ def main(cfg: DictConfig):
         #f1.append(results["f1"])
         #f1_adjusted.append(results["f1_adjusted"])
 
-        wandb_logger.experiment.config[f"auc_subset_{i+1}/{len(loaders)}"] = results["auc"]
+        #wandb_logger.experiment.config[f"auc_subset_{i+1}/{len(loaders)}"] = results["auc"]
         #wandb_logger.experiment.config[f"f1_subset_{i+1}/{len(loaders)}_{method}"] = results["f1"]
         #wandb_logger.experiment.config[f"f1_adjusted_subset_{i+1}/{len(loaders)}_{method}"] = results["f1_adjusted"]
-    
+
+        # To empty the gpu after each loop
+        LitModel.to("cpu")
+        del LitModel
+        del test_errors, test_labels, trainloader, testloader
+        torch.cuda.empty_cache()
+        torch.cuda.synchronize()
+        del trainer
+        trainer = None
+        gc.collect()
+        torch.cuda.empty_cache()
+        
     final_auc = np.mean(aucs)
     #final_f1 = np.mean(f1)
-    #final_adjusted = np.mean(f1_adjusted)
+    #final_adjusted = np.m.detach().cpu()ean(f1_adjusted)
 
     print(f"Final AUC: {final_auc}")
     #print(f"Final F1: {final_f1}")
@@ -133,10 +150,10 @@ def main(cfg: DictConfig):
     #save_results(filename="results/f1.json", dataset=dataset, model=f"{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}_{method}", score=round(final_f1, 4))
     #save_results(filename="results/f1_adjusted.json", dataset=dataset, model=f"{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}_{method}", score=round(final_adjusted, 4))
 
-    wandb_logger.experiment.config["final_auc"] = final_auc
+    #wandb_logger.experiment.config["final_auc"] = final_auc
     #wandb_logger.experiment.config[f"final_f1_{method}"] = final_f1
     #wandb_logger.experiment.config[f"final_f1_adjusted_{method}"] = final_adjusted
-    wandb.finish()
+    #wandb.finish()
 
 if __name__ == "__main__":
     main()

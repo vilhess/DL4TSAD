@@ -1,0 +1,2 @@
+name: diffae
+desc: a basic diffusion model for anomaly detection (small noise and denoise steps)

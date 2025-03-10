@@ -30,15 +30,17 @@ class DOCLit(L.LightningModule):
         self.latent_dim = config.latent_dim
         self.center=None
 
-    def init_center(self, trainloader):
+    def init_center(self, trainloader, device):
+        self.model = self.model.to(device)
         self.eval()
 
         n_samples = 0
         eps=0.1
-        c = torch.zeros(self.latent_dim)
+        c = torch.zeros(self.latent_dim, device=device)
 
         with torch.no_grad():
             for x, _ in trainloader:
+                x = x.to(device)
                 proj = self.model(x)
                 n_samples += proj.shape[0]
                 c += torch.sum(proj, dim=0)

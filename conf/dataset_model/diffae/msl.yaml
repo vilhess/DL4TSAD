@@ -1,0 +1,12 @@
+name: msl
+
+bs: 128
+ws: 99
+in_dim: 55
+
+lr: 1e-4
+epochs: 20
+dims: [55, 100, 200]
+time_dim: 100
+noise_steps: 100
+denoise_steps: 10
