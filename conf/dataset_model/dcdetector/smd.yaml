@@ -9,5 +9,5 @@ lr: 1e-4
 patch_sizes: [5, 10]
 d_model: 100
 e_layers: 1
-dp: 0.
-n_heads: 16
+dp: 0.3
+n_heads: 8

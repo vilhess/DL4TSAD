@@ -35,7 +35,7 @@ def main(cfg: DictConfig):
 
     loaders = get_loaders(dataset, config)
 
-    #wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}")
+    wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}")
 
     aucs, f1, f1_adjusted = [], [], []
     
@@ -44,13 +44,13 @@ def main(cfg: DictConfig):
         print(f"Currently working on subset {i+1}/{len(loaders)}")
 
         config["len_loader"] = len(trainloader) # Useful for some lr scheduler
+        wandb_logger.config = config
 
         LitModel = model(config)
         if model_name=="doc":
             LitModel.init_center(trainloader, device=DEVICE)
-        #trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1)
+        trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1)
         #trainer = L.Trainer(max_epochs=1, logger=False, enable_checkpointing=False, fast_dev_run=True)
-        trainer = L.Trainer(max_epochs=config.epochs, logger=False, enable_checkpointing=False, log_every_n_steps=1)
 
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
         
@@ -80,7 +80,7 @@ def main(cfg: DictConfig):
         #f1.append(results["f1"])
         #f1_adjusted.append(results["f1_adjusted"])
 
-        #wandb_logger.experiment.config[f"auc_subset_{i+1}/{len(loaders)}"] = results["auc"]
+        wandb_logger.experiment.results[f"auc_subset_{i+1}/{len(loaders)}"] = results["auc"]
         #wandb_logger.experiment.config[f"f1_subset_{i+1}/{len(loaders)}_{method}"] = results["f1"]
         #wandb_logger.experiment.config[f"f1_adjusted_subset_{i+1}/{len(loaders)}_{method}"] = results["f1_adjusted"]
 
@@ -103,11 +103,11 @@ def main(cfg: DictConfig):
     #print(f"Final F1: {final_f1}")
     #print(f"Final F1-Adjusted: {final_adjusted}")
 
-    #save_results(filename="results/aucs.json", dataset=dataset, model=f'{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}', score=round(final_auc, 4))
+    save_results(filename="results/aucs.json", dataset=dataset, model=f'{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}', score=round(final_auc, 4))
     #save_results(filename="results/f1.json", dataset=dataset, model=f"{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}_{method}", score=round(final_f1, 4))
     #save_results(filename="results/f1_adjusted.json", dataset=dataset, model=f"{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}_{method}", score=round(final_adjusted, 4))
 
-    #wandb_logger.experiment.config["final_auc"] = final_auc
+    wandb_logger.experiment.results["final_auc"] = final_auc
     #wandb_logger.experiment.config[f"final_f1_{method}"] = final_f1
     #wandb_logger.experiment.config[f"final_f1_adjusted_{method}"] = final_adjusted
     #wandb.finish()
