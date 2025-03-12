@@ -75,7 +75,7 @@ def main(cfg: DictConfig):
         aucs.append(auc)
         wandb_logger.experiment.summary[f"auc_subset_{i+1}/{len(loaders)}"] = auc
 
-        # To empty the gpu after each loop
+        ### Free memory after each subset
         LitModel.to("cpu")
         del LitModel
         del test_errors, test_labels, trainloader, testloader
@@ -85,6 +85,7 @@ def main(cfg: DictConfig):
         trainer = None
         gc.collect()
         torch.cuda.empty_cache()
+        ###
         
     final_auc = np.mean(aucs)
     print(f"Final AUC: {final_auc}")
