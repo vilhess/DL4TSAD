@@ -46,7 +46,7 @@ def main(cfg: DictConfig):
         if model_name=="doc":
             LitModel.init_center(trainloader, device=DEVICE)
         trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1)
-        #trainer = L.Trainer(max_epochs=1, logger=False, enable_checkpointing=False, fast_dev_run=True)
+        #trainer = L.Trainer(max_epochs=1, logger=wandb_logger, enable_checkpointing=False, fast_dev_run=True)
 
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
         
@@ -73,7 +73,7 @@ def main(cfg: DictConfig):
         print(f"AUC: {auc}")
 
         aucs.append(auc)
-        wandb_logger.experiment.results[f"auc_subset_{i+1}/{len(loaders)}"] = auc
+        wandb_logger.experiment.summary[f"auc_subset_{i+1}/{len(loaders)}"] = auc
 
         # To empty the gpu after each loop
         LitModel.to("cpu")
@@ -89,7 +89,7 @@ def main(cfg: DictConfig):
     final_auc = np.mean(aucs)
     print(f"Final AUC: {final_auc}")
     save_results(filename="results/aucs.json", dataset=dataset, model=f'{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}', score=round(final_auc, 4))
-    wandb_logger.experiment.results["final_auc"] = final_auc
+    wandb_logger.experiment.summary[f"final_auc"] = final_auc
 
     wandb.finish()
 
