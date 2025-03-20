@@ -13,11 +13,11 @@ subtract_last: false
 patch_size: 8
 patch_stride: 6
 cf_dim: 64
-e_layers: 4
-n_heads: 4
-d_ff: 256
+e_layers: 3
+n_heads: 16
+d_ff: 128
 d_model: 128
-head_dim: 20
+head_dim: 32
 individual: 1
 dropout: 0.1
 head_dropout: 0.8
