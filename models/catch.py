@@ -458,5 +458,5 @@ class CatchLit(L.LightningModule):
 
     def on_train_epoch_end(self):
         optimizer, optimizerM = self.optimizers()
-        self.adjust_learning_rate(optimizer, self.current_epoch+1, printout=True)
-        self.adjust_learning_rate(optimizerM, self.current_epoch+1, printout=True)
+        self.adjust_learning_rate(optimizer, self.current_epoch+1, printout=False)
+        self.adjust_learning_rate(optimizerM, self.current_epoch+1, printout=False)
