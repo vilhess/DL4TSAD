@@ -29,6 +29,8 @@ def load_model(model_name):
         from models.madgan import MADGANLit as model
     elif model_name=="diffae":
         from models.diffae import FastDiffNetLit as model
+    elif model_name=="catch":
+        from models.catch import CatchLit as model
     else:
         assert False, f"{model_name} is not implemented"
     return model

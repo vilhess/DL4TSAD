@@ -63,6 +63,7 @@ The models we consider are:
 - [**PatchAD**](https://arxiv.org/abs/2401.09793) - [GitHub: PatchAD](https://github.com/EmorZz1G/PatchAD)
 - [**USAD**](https://dl.acm.org/doi/10.1145/3394486.3403392) 
 - [**MADGAN**](https://arxiv.org/abs/1901.04997) - [GitHub: madgan-pytorch](https://github.com/Guillem96/madgan-pytorch)
+- [**CATCH**](https://arxiv.org/pdf/2410.12261) - [GitHub: CATCH](https://github.com/decisionintelligence/CATCH)
 
 We slightly edited the model's code from the original GitHub repository to make it work on our project. We follow the PyTorch Lightning framework.
 
@@ -94,6 +95,7 @@ where `<dataset_name>`, `<model_name>` and `<method_name>` can be one of the fol
 | `patchtst`   |                        |        |
 | `tranad`     |                        |        |
 | `usad`       |                        |        |
+| `catch`       |                        |        |
 
 
 ---

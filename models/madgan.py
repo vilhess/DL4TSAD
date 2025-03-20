@@ -80,7 +80,7 @@ class MADGANLit(L.LightningModule):
         self.automatic_optimization = False
     
     def training_step(self, batch, batch_idx):
-        optim_disc, optim_gen = self.configure_optimizers()
+        optim_disc, optim_gen = self.optimizers()
         x, _ = batch
         bs = x.size(0)
 

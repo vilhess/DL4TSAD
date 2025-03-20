@@ -49,7 +49,7 @@ class USADLit(L.LightningModule):
         self.automatic_optimization = False
     
     def training_step(self, batch, batch_idx):
-        optim1, optim2 = self.configure_optimizers()
+        optim1, optim2 = self.optimizers()
         x, _ = batch
         x = x.flatten(start_dim=1)
 
