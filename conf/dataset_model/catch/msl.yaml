@@ -12,7 +12,6 @@ affine: true
 subtract_last: false
 patch_size: 8
 patch_stride: 6
-seq_len: 100
 cf_dim: 64
 e_layers: 4
 n_heads: 4
