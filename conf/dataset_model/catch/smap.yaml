@@ -14,7 +14,7 @@ patch_size: 8
 patch_stride: 6
 cf_dim: 64
 e_layers: 3
-n_heads: 16
+n_heads: 8
 d_ff: 128
 d_model: 128
 head_dim: 32
