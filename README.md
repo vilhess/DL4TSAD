@@ -80,29 +80,29 @@ python main.py dataset=<dataset_name> model=<model_name> method=<method_name>
 where `<dataset_name>`, `<model_name>` and `<method_name>` can be one of the following:  
 
 
-| Models       | Datasets               | Method  
-|-------------|------------------------|----------
-| `aelstm`     | `nyc_taxi`            |`spot`  |
-| `anotrans`   | `ec2_request_latency_system_failure` |`dspot`|  
-| `dcdetector` | `smd`                 |        |
-| `doc`        | `smap`                |        |
-| `drocc`      | `msl`                 |        |
-| `fedformer`  | `swat`                |        |
-| `lstm`       |                        |        |
-| `madgan`     |                        |        |
-| `patchad`    |                        |        |
-| `patchtrad`  |                        |        |
-| `patchtst`   |                        |        |
-| `tranad`     |                        |        |
-| `usad`       |                        |        |
-| `catch`       |                        |        |
+| Models       | Datasets               | 
+|-------------|------------------------|
+| `aelstm`     | `nyc_taxi`            |
+| `anotrans`   | `ec2_request_latency_syste` |
+| `dcdetector` | `smd`                 |  
+| `doc`        | `smap`                |  
+| `drocc`      | `msl`                 |  
+| `fedformer`  | `swat`                |  
+| `lstm`       |                        | 
+| `madgan`     |                        | 
+| `patchad`    |                        | 
+| `patchtrad`  |                        | 
+| `patchtst`   |                        | 
+| `tranad`     |                        | 
+| `usad`       |                        | 
+| `catch`       |                        |
 
 
 ---
 
 ## Testing 
 
-During the testing phase, we evaluate the model's performance using ROC-AUC and F1 scores. For anomaly detection, we employ adaptive thresholding based on techniques from [Anomaly Detection in Streams with Extreme Value Theory](https://hal.science/hal-01640325/document). Both `SPOT` and `DSPOT` methods are available.
+During testing phase, we evaluate model's performance using solely ROC-AUC as it does not depends on setting a threshold.
 
 ## Configurations
 
