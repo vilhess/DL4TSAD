@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define datasets to iterate over
-datasets=("swat" "msl" "smap" "smd") # "nyc_taxi" "ec2_request_latency_system_failure" 
+datasets=("swat" "msl" "smap") # "nyc_taxi" "ec2_request_latency_system_failure"  "smd"
 
 for DATASET in "${datasets[@]}"; do
     echo "Running experiments on dataset: $DATASET"
@@ -12,7 +12,7 @@ for DATASET in "${datasets[@]}"; do
         #["DOC"]="python main.py dataset=$DATASET model=doc"
         #["PatchTST_REV"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=1 " 
         #["PatchTST"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=0" 
-        ["USAD"]="python main.py dataset=$DATASET model=usad"
+        #["USAD"]="python main.py dataset=$DATASET model=usad"
         #["DROCC"]="python main.py dataset=$DATASET model=drocc"
         #["LSTM_REV"]="python main.py dataset=$DATASET model=lstm dataset_model.revin=1" 
         #["LSTM"]="python main.py dataset=$DATASET model=lstm dataset_model.revin=0"  

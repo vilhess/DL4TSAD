@@ -413,6 +413,8 @@ class CatchLit(L.LightningModule):
         self.pct_start = config.pct_start
         self.num_epochs = config.epochs
         self.step = min(int(config.len_loader / 10), 100)
+        if self.step == 0:
+            self.step = 1
         self.temp_anomaly_score = nn.MSELoss(reduction="none")
         self.frequency_criterion = frequency_criterion(config)
     
