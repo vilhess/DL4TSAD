@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 import torch 
 from torch.utils.data import Dataset, DataLoader
 
@@ -30,14 +30,14 @@ class NASA(Dataset):
         indices = [int(i) for i in indices]
         
         normal = np.load(os.path.join(root, "train", f"{filename}.npy"))
-        scaler = MinMaxScaler()
+        scaler = StandardScaler()
         x_normal_scaled = scaler.fit_transform(normal)
 
         normal = pd.DataFrame(x_normal_scaled)
 
 
         attack = np.load(os.path.join(root, "test", f"{filename}.npy"))
-        x_attack_scaled = scaler.transform(attack).clip(0, 1)
+        x_attack_scaled = scaler.transform(attack)
         attack = pd.DataFrame(x_attack_scaled)
 
         labels = np.zeros(len(attack))
