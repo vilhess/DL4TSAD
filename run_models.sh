@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define datasets to iterate over
-datasets=("swat" "msl" "smap") # "nyc_taxi" "ec2_request_latency_system_failure"  "smd"
+datasets=("smap") # "nyc_taxi" "ec2_request_latency_system_failure"  "smd" "swat" "msl" 
 
 for DATASET in "${datasets[@]}"; do
     echo "Running experiments on dataset: $DATASET"
@@ -10,23 +10,23 @@ for DATASET in "${datasets[@]}"; do
     declare -A models=(
         #["AELSTM"]="python main.py dataset=$DATASET model=aelstm"
         #["DOC"]="python main.py dataset=$DATASET model=doc"
-        #["PatchTST_REV"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=1 " 
-        #["PatchTST"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=0" 
-        #["USAD"]="python main.py dataset=$DATASET model=usad"
-        #["DROCC"]="python main.py dataset=$DATASET model=drocc"
-        #["LSTM_REV"]="python main.py dataset=$DATASET model=lstm dataset_model.revin=1" 
+        ["PatchTST_REV"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=1 " 
+        ["PatchTST"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=0" 
+        ["USAD"]="python main.py dataset=$DATASET model=usad"
+        ["DROCC"]="python main.py dataset=$DATASET model=drocc"
+        ["LSTM_REV"]="python main.py dataset=$DATASET model=lstm dataset_model.revin=1" 
         #["LSTM"]="python main.py dataset=$DATASET model=lstm dataset_model.revin=0"  
-        #["MADGAN"]="python main.py dataset=$DATASET model=madgan"
-        #["TRANAD"]="python main.py dataset=$DATASET model=tranad"
-        #["PATCHTRAD"]="python main.py dataset=$DATASET model=patchtrad"
-        #["DCDETECTOR"]="python main.py dataset=$DATASET model=dcdetector"
-        #["ANOTRANS"]="python main.py dataset=$DATASET model=anotrans"
-        #["PATCHAD"]="python main.py dataset=$DATASET model=patchad"
+        ["MADGAN"]="python main.py dataset=$DATASET model=madgan"
+        ["TRANAD"]="python main.py dataset=$DATASET model=tranad"
+        ["PATCHTRAD"]="python main.py dataset=$DATASET model=patchtrad"
+        ["DCDETECTOR"]="python main.py dataset=$DATASET model=dcdetector"
+        ["ANOTRANS"]="python main.py dataset=$DATASET model=anotrans"
+        ["PATCHAD"]="python main.py dataset=$DATASET model=patchad"
         ["CATCH"]="python main.py dataset=$DATASET model=catch"
     )
 
     # Define an array to specify the execution order
-    order=("AELSTM" "DOC" "PatchTST" "PatchTST_REV" "USAD" "CATCH" "LSTM" "LSTM_REV" "TRANAD" "PATCHTRAD" "PATCHAD" "ANOTRANS" "DCDETECTOR" "MADGAN" "DROCC")
+    order=("AELSTM" "DOC" "PatchTST" "PatchTST_REV" "USAD" "LSTM" "LSTM_REV" "TRANAD" "PATCHTRAD" "PATCHAD" "ANOTRANS" "DCDETECTOR" "MADGAN" "DROCC" "CATCH")
 
     # Loop through each model in the specified order
     for model in "${order[@]}"; do
