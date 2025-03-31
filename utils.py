@@ -31,6 +31,8 @@ def load_model(model_name):
         from models.diffae import FastDiffNetLit as model
     elif model_name=="catch":
         from models.catch import CatchLit as model
+    elif model_name=="gat":
+        from models.gat import MDAT_GAT_Lit as model
     else:
         assert False, f"{model_name} is not implemented"
     return model

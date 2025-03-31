@@ -64,8 +64,9 @@ The models we consider are:
 - [**USAD**](https://dl.acm.org/doi/10.1145/3394486.3403392) 
 - [**MADGAN**](https://arxiv.org/abs/1901.04997) - [GitHub: madgan-pytorch](https://github.com/Guillem96/madgan-pytorch)
 - [**CATCH**](https://arxiv.org/pdf/2410.12261) - [GitHub: CATCH](https://github.com/decisionintelligence/CATCH)
+- [**MTAD-GAT**](https://arxiv.org/pdf/2009.02040) - [GitHub: mtad-gat-pytorch](https://github.com/ML4ITS/mtad-gat-pytorch)
 
-We slightly edited the model's code from the original GitHub repository to make it work on our project. We follow the PyTorch Lightning framework.
+When available, we slightly edited the model's code from the original GitHub repository to make it work on our project. We follow the PyTorch Lightning framework.
 
 --- 
 
@@ -96,6 +97,7 @@ where `<dataset_name>`, `<model_name>` and `<method_name>` can be one of the fol
 | `tranad`     |                        | 
 | `usad`       |                        | 
 | `catch`       |                        |
+| `MTAD-GAT`       |                        |
 
 
 ---
