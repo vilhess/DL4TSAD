@@ -6,4 +6,4 @@ in_dim: 51
 
 epochs: 5
 lr: 1e-4
-mode: recon
+mode: forecast
