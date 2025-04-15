@@ -1,6 +1,6 @@
 defaults:
   - dataset: swat
-  - model: madgan
+  - model: patchtrad
   - dataset_model: ${model}/${dataset}
 
   - _self_  
