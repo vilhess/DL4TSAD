@@ -7,4 +7,10 @@
 *checkpoints/
 wandb/
 
+multi_simu.py 
+visu_multi.ipynb
+results/simu_aucs.json
+results/simu_aucs_std.json
+run_multi.sh
+
 !requirements.txt

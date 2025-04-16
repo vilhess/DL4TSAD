@@ -299,8 +299,10 @@ class Head(nn.Module):
 class PatchTrAD(nn.Module):
     def __init__(self, config):
         super().__init__()
-        config.ws += 1
-        num_patches = config.ws // config.patch_len
+        
+        window_size = 100
+        num_patches = window_size // config.patch_len
+        config["ws"] = window_size
 
         self.encoder = PatchTrADencoder(config)
         checkpoint_path = config.save_path +'.ckpt'
