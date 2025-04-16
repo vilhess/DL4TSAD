@@ -45,7 +45,13 @@ def main(cfg: DictConfig):
         LitModel = model(config)
         if model_name=="doc":
             LitModel.init_center(trainloader, device=DEVICE)
-        trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1)
+
+        precision=None
+        if 'use_bfloat16' in config:
+            print('Using bfloat16 mixed precision')
+            precision = "bf16-mixed"
+
+        trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1, precision=precision)
         #trainer = L.Trainer(max_epochs=1, logger=wandb_logger, enable_checkpointing=False, fast_dev_run=True)
 
         trainer.fit(model=LitModel, train_dataloaders=trainloader)

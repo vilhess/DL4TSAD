@@ -1,0 +1,21 @@
+name: swat
+in_dim: 51
+
+ws: 99
+patch_len: 5
+
+d_model: 128
+d_ff: 256
+n_heads: 8
+n_layers: 2
+
+save_path: models/checkpoint/jepatchtrad
+
+epochs: 5
+lr: 1e-4
+bs: 256
+
+head_dp: 0.
+freeze_encoder: True
+
+use_bfloat16: True

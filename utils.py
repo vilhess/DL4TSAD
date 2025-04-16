@@ -33,6 +33,8 @@ def load_model(model_name):
         from models.catch import CatchLit as model
     elif model_name=="gat":
         from models.gat import MDAT_GAT_Lit as model
+    elif model_name=="jepatchtrad":
+        from models.jepatchtrad import JEPAtchTradLit as model
     else:
         assert False, f"{model_name} is not implemented"
     return model
