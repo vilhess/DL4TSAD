@@ -18,4 +18,4 @@ bs: 256
 head_dp: 0.
 freeze_encoder: True
 
-use_bfloat16: True
+precision: bf16-mixed

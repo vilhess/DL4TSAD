@@ -68,6 +68,6 @@ def get_loaders(window_size=10, root_dir="data/nab", dataset="nyc_taxi", batch_s
     train = NABdata(root_dir=root_dir, dataset=dataset, mode="train", window_size=window_size)
     test = NABdata(root_dir=root_dir, dataset=dataset, mode="test", window_size=window_size)
 
-    trainloader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=21)
-    testloader = DataLoader(test, batch_size=batch_size, shuffle=False, num_workers=21)
+    trainloader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=8, persistent_workers=True)
+    testloader = DataLoader(test, batch_size=batch_size, shuffle=False, num_workers=8, persistent_workers=True)
     return trainloader, testloader
