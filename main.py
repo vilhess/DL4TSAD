@@ -65,7 +65,7 @@ def main(cfg: DictConfig):
         if DEVICE == "cuda": ### Free memory after each subset
             LitModel.to("cpu")
             del LitModel
-            del test_errors, test_labels, trainloader, testloader
+            del trainloader, testloader
             torch.cuda.empty_cache()
             torch.cuda.synchronize()
             del trainer
