@@ -3,6 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import lightning as L 
+from torchmetrics.classification import BinaryAUROC
+
 
 class Generator(nn.Module):
     def __init__(self, config):
@@ -78,6 +80,7 @@ class MADGANLit(L.LightningModule):
         self.latent_dim = config.latent_dim
         self.weight = config.weight
         self.automatic_optimization = False
+        self.auc = BinaryAUROC()
     
     def training_step(self, batch, batch_idx):
         optim_disc, optim_gen = self.optimizers()
@@ -126,3 +129,13 @@ class MADGANLit(L.LightningModule):
         res_loss = (generated - x).abs().sum(dim=(1, 2))
         score = self.weight * disc_score + (1-self.weight)*res_loss
         return score
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

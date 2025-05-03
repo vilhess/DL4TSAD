@@ -6,6 +6,8 @@ import torch.nn.functional as F
 import numpy as np
 import lightning as L
 from models.revin import RevIN
+from torchmetrics.classification import BinaryAUROC
+
 
 class Transpose(nn.Module):
     def __init__(self, *dims, contiguous=False): 
@@ -517,6 +519,7 @@ class PatchTSTLit(L.LightningModule):
         self.epoch = config.epochs
         self.len_loader = config.len_loader
         self.criterion = nn.MSELoss()
+        self.auc = BinaryAUROC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -538,3 +541,13 @@ class PatchTSTLit(L.LightningModule):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, pct_start=self.pct_start, epochs=self.epoch, max_lr=self.lr, steps_per_epoch=self.len_loader)
         return {"optimizer": optimizer, "lr_scheduler": scheduler}
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

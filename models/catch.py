@@ -6,6 +6,9 @@ from torch.nn.functional import gumbel_softmax
 from einops import rearrange
 import numpy as np 
 import math
+from torchmetrics.classification import BinaryAUROC
+
+
 class RevIN(nn.Module):
     def __init__(self, num_features: int, eps=1e-5, affine=True, subtract_last=False):
         """
@@ -417,6 +420,8 @@ class CatchLit(L.LightningModule):
             self.step = 1
         self.temp_anomaly_score = nn.MSELoss(reduction="none")
         self.frequency_criterion = frequency_criterion(config)
+
+        self.auc = BinaryAUROC()
     
     def training_step(self, batch, batch_idx):
         optim, optimM = self.optimizers()
@@ -462,3 +467,13 @@ class CatchLit(L.LightningModule):
         optimizer, optimizerM = self.optimizers()
         self.adjust_learning_rate(optimizer, self.current_epoch+1, printout=False)
         self.adjust_learning_rate(optimizerM, self.current_epoch+1, printout=False)
+
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

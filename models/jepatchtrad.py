@@ -5,6 +5,8 @@ from einops import rearrange
 import math
 import lightning as L 
 from copy import deepcopy
+from torchmetrics.classification import BinaryAUROC
+
 
 class Patcher(nn.Module):
     def __init__(self, window_size, patch_len):
@@ -338,6 +340,7 @@ class JEPAtchTradLit(L.LightningModule):
         super().__init__()
         self.model = PatchTrAD(config)
         self.lr = config.lr
+        self.auc = BinaryAUROC()
     
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -352,3 +355,13 @@ class JEPAtchTradLit(L.LightningModule):
     
     def get_loss(self, x, mode=None):
         return self.model.get_loss(x, mode=mode)
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

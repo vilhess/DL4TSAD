@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn 
 import torch.optim as optim
 import lightning as L 
+from torchmetrics.classification import BinaryAUROC
+
 
 class Encoder(nn.Module):
     def __init__(self, input_dim=1, hidden_size=128, num_layers=1, bidirectional=False):
@@ -80,6 +82,7 @@ class AELSTMLit(L.LightningModule):
         self.model = AELSTM(config)
         self.lr = config.lr
         self.criterion = nn.MSELoss()
+        self.auc = BinaryAUROC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -96,3 +99,13 @@ class AELSTMLit(L.LightningModule):
         reconstructed = self.model(x)
         loss = torch.abs(reconstructed - x[:, -1, :]).sum(dim=1)
         return loss
+
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

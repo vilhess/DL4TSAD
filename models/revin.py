@@ -2,6 +2,8 @@
 
 import torch
 import torch.nn as nn
+from torchmetrics.classification import BinaryAUROC
+
 
 class RevIN(nn.Module):
     def __init__(self, num_features: int, eps=1e-5, affine=True, subtract_last=False):
@@ -61,3 +63,13 @@ class RevIN(nn.Module):
         else:
             x = x + self.mean
         return x
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

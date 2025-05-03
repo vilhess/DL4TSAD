@@ -1,6 +1,8 @@
 import torch 
 import torch.nn as nn
 import lightning as L 
+from torchmetrics.classification import BinaryAUROC
+
 
 class ConvLayer(nn.Module):
     def __init__(self, n_features, kernel_size=7):
@@ -222,6 +224,7 @@ class MDAT_GAT_Lit(L.LightningModule):
         self.criterion = nn.MSELoss(reduction="none")
         self.cri_mode = config.mode
         assert self.cri_mode in ["forecast", "recon"], f"Invalid mode: {self.cri_mode}. Choose between 'forecast' and 'recon'."
+        self.auc = BinaryAUROC()
         
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -250,3 +253,13 @@ class MDAT_GAT_Lit(L.LightningModule):
             rec = self.model(x)
             loss = self.criterion(rec, x)
             return loss
+        
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

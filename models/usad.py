@@ -1,6 +1,7 @@
 import torch 
 import torch.nn as nn 
 import lightning as L 
+from torchmetrics.classification import BinaryAUROC
 
 class Encoder(nn.Module):
     def __init__(self, config):
@@ -47,6 +48,7 @@ class USADLit(L.LightningModule):
         self.alpha = config.alpha
         self.beta = config.beta
         self.automatic_optimization = False
+        self.auc = BinaryAUROC()
     
     def training_step(self, batch, batch_idx):
         optim1, optim2 = self.optimizers()
@@ -84,3 +86,13 @@ class USADLit(L.LightningModule):
         w2 = self.dec2(self.enc(w1))
         loss = self.alpha * torch.mean((x-w1)**2 + self.beta * torch.mean(x - w2)**2, dim=1)
         return loss
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

@@ -3,10 +3,8 @@ import numpy as np
 import lightning as L
 import wandb
 from pytorch_lightning.loggers import WandbLogger
-from sklearn.metrics import roc_auc_score
 import hydra
 from omegaconf import DictConfig, OmegaConf
-from tqdm import tqdm
 import gc
 
 from utils import load_model, get_loaders, save_results
@@ -55,43 +53,26 @@ def main(cfg: DictConfig):
         #trainer = L.Trainer(max_epochs=1, logger=wandb_logger, enable_checkpointing=False, fast_dev_run=True)
 
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
-        
-        test_errors = []
-        test_labels = []
 
-        LitModel = LitModel.to(DEVICE)
-        LitModel.eval()
-
-        with torch.no_grad():
-            pbar = tqdm(testloader, desc="Detection Phase")
-            for x, anomaly in pbar:
-                x = x.to(DEVICE)
-                errors = LitModel.get_loss(x, mode="test")
-
-                test_labels.append(anomaly)
-                test_errors.append(errors)
-                del x
-
-        test_errors = torch.cat(test_errors).detach().cpu()
-        test_labels = torch.cat(test_labels).detach().cpu()
-
-        auc = roc_auc_score(test_labels, test_errors)
+        results = trainer.test(model=LitModel, dataloaders=testloader)
+        auc = results[0]["auc"]
         print(f"AUC: {auc}")
 
         aucs.append(auc)
         wandb_logger.experiment.summary[f"auc_subset_{i+1}/{len(loaders)}"] = auc
 
-        ### Free memory after each subset
-        LitModel.to("cpu")
-        del LitModel
-        del test_errors, test_labels, trainloader, testloader
-        torch.cuda.empty_cache()
-        torch.cuda.synchronize()
-        del trainer
-        trainer = None
-        gc.collect()
-        torch.cuda.empty_cache()
-        ###
+
+        if DEVICE == "cuda": ### Free memory after each subset
+            LitModel.to("cpu")
+            del LitModel
+            del test_errors, test_labels, trainloader, testloader
+            torch.cuda.empty_cache()
+            torch.cuda.synchronize()
+            del trainer
+            trainer = None
+            gc.collect()
+            torch.cuda.empty_cache()
+            ###
         
     final_auc = np.mean(aucs)
     print(f"Final AUC: {final_auc}")

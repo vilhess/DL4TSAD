@@ -3,6 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 import lightning as L
+from torchmetrics.classification import BinaryAUROC
+
 
 class SinusoidalPositionEmbeddings(nn.Module):
     def __init__(self, dim, seq_len=1000):
@@ -174,6 +176,7 @@ class FastDiffNet(nn.Module):
         self.denoiser = FastUnet(dims=dims, time_dim=time_dim)
         self.noise_steps=config.noise_steps
         self.denoise_steps = config.denoise_steps
+        self.auc = BinaryAUROC()
     
     def forward(self, x):
         x = x.permute(0, 2, 1)
@@ -210,3 +213,13 @@ class FastDiffNetLit(L.LightningModule):
             _, rec = self.model(x)
             loss = ((rec-x)**2).mean(dim=(1, 2))
             return loss
+        
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

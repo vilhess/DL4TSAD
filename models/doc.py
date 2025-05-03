@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn 
 import lightning as L 
+from torchmetrics.classification import BinaryAUROC
+
 
 class DOC(nn.Module):
     def __init__(self, config):
@@ -29,6 +31,7 @@ class DOCLit(L.LightningModule):
         self.wd = config.wd
         self.latent_dim = config.latent_dim
         self.center=None
+        self.auc = BinaryAUROC()
 
     def init_center(self, trainloader, device):
         self.model = self.model.to(device)
@@ -70,3 +73,13 @@ class DOCLit(L.LightningModule):
         proj = self.model(x)
         dist = torch.sum((proj - self.center.to(proj.device)) ** 2, dim=1)
         return dist
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

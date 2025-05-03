@@ -6,6 +6,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 import lightning as L 
 import math
+from torchmetrics.classification import BinaryAUROC
+
 
 
 class Patcher(nn.Module):
@@ -340,6 +342,7 @@ class PatchTradLit(L.LightningModule):
         super().__init__()
         self.model = PatchTrad(config)
         self.lr = config.lr
+        self.auc = BinaryAUROC()
     
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -354,3 +357,13 @@ class PatchTradLit(L.LightningModule):
     
     def get_loss(self, x, mode=None):
         return self.model.get_loss(x, mode=mode)
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

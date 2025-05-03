@@ -8,6 +8,8 @@ from tkinter import _flatten
 from einops.layers.torch import Rearrange
 from einops import reduce
 import lightning as L 
+from torchmetrics.classification import BinaryAUROC
+
 
 class RevIN(nn.Module):
     def __init__(self, num_features: int, eps=1e-5, affine=True):
@@ -690,6 +692,7 @@ class PatchADLit(L.LightningModule):
         self.patch_mx = config.patch_mx
         self.beta = config.beta
         self.ws = config.ws+1
+        self.auc = BinaryAUROC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -735,3 +738,13 @@ class PatchADLit(L.LightningModule):
         cri = metric.detach().cpu()
         loss = cri[:, -1]
         return loss
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

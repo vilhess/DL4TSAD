@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn 
 import lightning as L 
 from models.revin import RevIN
+from torchmetrics.classification import BinaryAUROC
+
 
 class LSTM(nn.Module):
     def __init__(self, config):
@@ -38,6 +40,7 @@ class LSTMLit(L.LightningModule):
         self.model = LSTM(config)
         self.lr = config.lr
         self.criterion = nn.MSELoss()
+        self.auc = BinaryAUROC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -58,3 +61,13 @@ class LSTMLit(L.LightningModule):
         pred = self.model(inputs)
         loss = torch.abs(target - pred.squeeze(1)).mean(dim=1)
         return loss
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

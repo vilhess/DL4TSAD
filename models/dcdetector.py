@@ -4,6 +4,8 @@ from math import sqrt, log
 from einops import rearrange, reduce, repeat
 from tkinter import _flatten
 import lightning as L 
+from torchmetrics.classification import BinaryAUROC
+
 
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model, max_len=5000):
@@ -267,6 +269,7 @@ class DCDetectorLit(L.LightningModule):
         self.model = DCDetector(config)
         self.lr = config.lr
         self.ws = config.ws + 1
+        self.auc = BinaryAUROC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -327,3 +330,13 @@ class DCDetectorLit(L.LightningModule):
         current_epoch = self.current_epoch
         initial_lr = self.lr
         self.adjust_learning_rate(optimizer, current_epoch, initial_lr)
+
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)

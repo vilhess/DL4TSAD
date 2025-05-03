@@ -10,6 +10,8 @@ import torch.nn.functional as F
 import numpy as np 
 import math
 import lightning as L 
+from torchmetrics.classification import BinaryAUROC
+
 
 class TokenEmbedding(nn.Module):
     def __init__(self,c_in, d_model):
@@ -366,6 +368,7 @@ class FEDformerLit(L.LightningModule):
         self.lr = config.lr
         self.criterion = nn.MSELoss()
         self.criterion_wise = nn.MSELoss(reduction="none")
+        self.auc = BinaryAUROC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -386,3 +389,13 @@ class FEDformerLit(L.LightningModule):
         pred = self.model(inputs)
         loss = self.criterion_wise(target, pred.squeeze(1))
         return loss
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        errors = self.get_loss(x, mode="test")
+        self.auc.update(errors, y.int())
+    
+    def on_test_epoch_end(self):
+        auc = self.auc.compute()
+        self.auc.reset()
+        self.log("auc", auc, prog_bar=True)
