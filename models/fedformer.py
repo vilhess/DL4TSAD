@@ -10,7 +10,7 @@ import torch.nn.functional as F
 import numpy as np 
 import math
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class TokenEmbedding(nn.Module):
@@ -368,7 +368,7 @@ class FEDformerLit(L.LightningModule):
         self.lr = config.lr
         self.criterion = nn.MSELoss()
         self.criterion_wise = nn.MSELoss(reduction="none")
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch

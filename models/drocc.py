@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class LSTM(nn.Module):
@@ -34,7 +34,7 @@ class DROCCLit(L.LightningModule):
         self.asc_step_size = config.step_size
         self.only_ce_epochs = config.ce_epochs
         self.epochs = config.epochs
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         x, target = batch

@@ -3,7 +3,7 @@ import torch.nn as nn
 import numpy as np 
 from math import sqrt, pi, log
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class PositionalEncoding(nn.Module):
@@ -198,7 +198,7 @@ class AnomalyTransformerLit(L.LightningModule):
         self.criterion_wise = nn.MSELoss(reduction="none")
 
         self.automatic_optimization = False
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch

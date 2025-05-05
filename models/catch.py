@@ -6,7 +6,7 @@ from torch.nn.functional import gumbel_softmax
 from einops import rearrange
 import numpy as np 
 import math
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class RevIN(nn.Module):
@@ -421,7 +421,7 @@ class CatchLit(L.LightningModule):
         self.temp_anomaly_score = nn.MSELoss(reduction="none")
         self.frequency_criterion = frequency_criterion(config)
 
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
     
     def training_step(self, batch, batch_idx):
         optim, optimM = self.optimizers()

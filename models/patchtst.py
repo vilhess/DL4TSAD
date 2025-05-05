@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import numpy as np
 import lightning as L
 from models.revin import RevIN
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class Transpose(nn.Module):
@@ -519,7 +519,7 @@ class PatchTSTLit(L.LightningModule):
         self.epoch = config.epochs
         self.len_loader = config.len_loader
         self.criterion = nn.MSELoss()
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch

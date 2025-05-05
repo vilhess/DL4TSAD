@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import TransformerEncoder, TransformerDecoder
 import math
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class PositionalEncoding(nn.Module):
@@ -121,7 +121,7 @@ class TranADLit(L.LightningModule):
         self.model = TranAD(config)
         self.lr = config.lr
         self.criterion = nn.MSELoss(reduction="none")
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         epoch = self.trainer.current_epoch

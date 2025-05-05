@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn 
 import torch.optim as optim
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class Encoder(nn.Module):
@@ -82,7 +82,7 @@ class AELSTMLit(L.LightningModule):
         self.model = AELSTM(config)
         self.lr = config.lr
         self.criterion = nn.MSELoss()
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -103,7 +103,7 @@ class AELSTMLit(L.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         errors = self.get_loss(x, mode="test")
-        self.auc.update(errors, y.int())
+        self.auc.update(errors, y)
     
     def on_test_epoch_end(self):
         auc = self.auc.compute()

@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import lightning as L 
 import math
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 
@@ -342,7 +342,7 @@ class PatchTradLit(L.LightningModule):
         super().__init__()
         self.model = PatchTrad(config)
         self.lr = config.lr
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
     
     def training_step(self, batch, batch_idx):
         x, _ = batch

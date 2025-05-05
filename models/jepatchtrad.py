@@ -5,7 +5,7 @@ from einops import rearrange
 import math
 import lightning as L 
 from copy import deepcopy
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class Patcher(nn.Module):
@@ -340,7 +340,7 @@ class JEPAtchTradLit(L.LightningModule):
         super().__init__()
         self.model = PatchTrAD(config)
         self.lr = config.lr
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
     
     def training_step(self, batch, batch_idx):
         x, _ = batch

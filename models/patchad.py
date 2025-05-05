@@ -8,7 +8,7 @@ from tkinter import _flatten
 from einops.layers.torch import Rearrange
 from einops import reduce
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class RevIN(nn.Module):
@@ -692,7 +692,7 @@ class PatchADLit(L.LightningModule):
         self.patch_mx = config.patch_mx
         self.beta = config.beta
         self.ws = config.ws+1
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn 
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class DOC(nn.Module):
@@ -31,7 +31,7 @@ class DOCLit(L.LightningModule):
         self.wd = config.wd
         self.latent_dim = config.latent_dim
         self.center=None
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def init_center(self, trainloader, device):
         self.model = self.model.to(device)

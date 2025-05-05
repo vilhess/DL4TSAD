@@ -2,7 +2,6 @@
 
 import torch
 import torch.nn as nn
-from torchmetrics.classification import BinaryAUROC
 
 
 class RevIN(nn.Module):

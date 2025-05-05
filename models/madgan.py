@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class Generator(nn.Module):
@@ -80,7 +80,7 @@ class MADGANLit(L.LightningModule):
         self.latent_dim = config.latent_dim
         self.weight = config.weight
         self.automatic_optimization = False
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
     
     def training_step(self, batch, batch_idx):
         optim_disc, optim_gen = self.optimizers()

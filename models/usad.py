@@ -1,7 +1,7 @@
 import torch 
 import torch.nn as nn 
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 class Encoder(nn.Module):
     def __init__(self, config):
@@ -48,7 +48,7 @@ class USADLit(L.LightningModule):
         self.alpha = config.alpha
         self.beta = config.beta
         self.automatic_optimization = False
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
     
     def training_step(self, batch, batch_idx):
         optim1, optim2 = self.optimizers()

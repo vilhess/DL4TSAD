@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn 
 import lightning as L 
 from models.revin import RevIN
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class LSTM(nn.Module):
@@ -40,7 +40,7 @@ class LSTMLit(L.LightningModule):
         self.model = LSTM(config)
         self.lr = config.lr
         self.criterion = nn.MSELoss()
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch

@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 import lightning as L
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class SinusoidalPositionEmbeddings(nn.Module):
@@ -176,7 +176,7 @@ class FastDiffNet(nn.Module):
         self.denoiser = FastUnet(dims=dims, time_dim=time_dim)
         self.noise_steps=config.noise_steps
         self.denoise_steps = config.denoise_steps
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
     
     def forward(self, x):
         x = x.permute(0, 2, 1)

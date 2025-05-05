@@ -1,7 +1,7 @@
 import torch 
 import torch.nn as nn
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class ConvLayer(nn.Module):
@@ -224,7 +224,7 @@ class MDAT_GAT_Lit(L.LightningModule):
         self.criterion = nn.MSELoss(reduction="none")
         self.cri_mode = config.mode
         assert self.cri_mode in ["forecast", "recon"], f"Invalid mode: {self.cri_mode}. Choose between 'forecast' and 'recon'."
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
         
     def training_step(self, batch, batch_idx):
         x, _ = batch

@@ -4,7 +4,7 @@ from math import sqrt, log
 from einops import rearrange, reduce, repeat
 from tkinter import _flatten
 import lightning as L 
-from torchmetrics.classification import BinaryAUROC
+from models.auc import StreamAUC
 
 
 class PositionalEncoding(nn.Module):
@@ -269,7 +269,7 @@ class DCDetectorLit(L.LightningModule):
         self.model = DCDetector(config)
         self.lr = config.lr
         self.ws = config.ws + 1
-        self.auc = BinaryAUROC()
+        self.auc = StreamAUC()
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
