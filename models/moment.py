@@ -28,26 +28,31 @@ class MomentAD(nn.Module):
 
         self.masking = Masking(mask_ratio=0.3)
 
-    def forward(self, x, mask=None):
-        out = self.model(x_enc=x, input_mask=mask).reconstruction
+    def forward(self, x_enc, input_mask=None, mask=None):
+        out = self.model(x_enc=x_enc, input_mask=input_mask, mask=mask).reconstruction
         return out
     
     def get_loss(self, x, mode='train'):
-        x = x.permute(0, 2, 1)
-        bs, d, l = x.shape
-        x = x.reshape(bs*d, 1, l)
 
-        mask = torch.ones(x.shape[0], x.shape[2]).to(x.device)
+        batch_x = x.permute(0, 2, 1)
+        bs, d, l = batch_x.shape
+        batch_masks = torch.ones(bs, l).to(batch_x.device)
+
         if mode == "train":
-            mask = self.masking.generate_mask(x=x, input_mask=mask).to(x.device).long()
 
-        output = self(x, mask=mask)
+            batch_x = batch_x.reshape(bs*d, 1, l)
+            batch_masks = batch_masks.repeat_interleave(d, dim=1)
+            masks = self.masking.generate_mask(x=batch_x, input_mask=batch_masks).to(batch_x.device).long()
 
-        x = x.reshape(bs, d, l)
-        output = output.reshape(bs, d, l)
+            output = self(x_enc=batch_x, input_mask=batch_masks, mask=masks)
 
-        error = ((output - x)**2).flatten(start_dim=1).mean(dim=(1))
+            batch_x = batch_x.reshape(bs, d, l)
+            output = output.reshape(bs, d, l)
 
+        elif mode == "test":
+            output = self(x_enc=batch_x, input_mask=batch_masks)
+
+        error = ((output - batch_x)**2).flatten(start_dim=1).mean(dim=(1))
         return error
     
 class MomentLit(L.LightningModule):
