@@ -1,0 +1,12 @@
+name: nyc_taxi
+in_dim: 1
+
+ws: 511 
+
+epochs: 10
+lr: 1e-4
+bs: 256
+
+size: small
+freeze_encoder: True
+freeze_head: False

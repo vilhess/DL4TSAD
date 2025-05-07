@@ -25,10 +25,11 @@ for DATASET in "${datasets[@]}"; do
         ["CATCH"]="python main.py dataset=$DATASET model=catch"
         ["GAT"]="python main.py dataset=$DATASET model=gat"
         ["JEPATCHTRAD"]="python main.py dataset=$DATASET model=jepatchtrad"
+        ["MOMENT"]="python main.py dataset=$DATASET model=moment"
     )
 
     # Define an array to specify the execution order
-    order=("AELSTM" "DOC" "PatchTST" "PatchTST_REV" "USAD" "LSTM" "LSTM_REV" "TRANAD" "PATCHTRAD" "PATCHAD" "ANOTRANS" "DCDETECTOR" "MADGAN" "DROCC" "CATCH" "GAT" "JEPATCHTRAD")
+    order=("AELSTM" "DOC" "PatchTST" "PatchTST_REV" "USAD" "LSTM" "LSTM_REV" "TRANAD" "PATCHTRAD" "PATCHAD" "ANOTRANS" "DCDETECTOR" "MADGAN" "DROCC" "CATCH" "GAT" "JEPATCHTRAD" "MOMENT")
 
     # Loop through each model in the specified order
     for model in "${order[@]}"; do

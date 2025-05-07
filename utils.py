@@ -35,6 +35,8 @@ def load_model(model_name):
         from models.gat import MDAT_GAT_Lit as model
     elif model_name=="jepatchtrad":
         from models.jepatchtrad import JEPAtchTradLit as model
+    elif model_name=="moment":
+        from models.moment import MomentLit as model
     else:
         assert False, f"{model_name} is not implemented"
     return model
