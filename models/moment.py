@@ -41,7 +41,8 @@ class MomentAD(nn.Module):
         if mode == "train":
 
             batch_x = batch_x.reshape(bs*d, 1, l)
-            batch_masks = batch_masks.repeat_interleave(d, dim=1)
+            batch_masks = batch_masks.repeat_interleave(d, dim=0)
+            print(batch_masks.shape, batch_x.shape)
             masks = self.masking.generate_mask(x=batch_x, input_mask=batch_masks).to(batch_x.device).long()
 
             output = self(x_enc=batch_x, input_mask=batch_masks, mask=masks)

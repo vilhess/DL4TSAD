@@ -7,5 +7,6 @@ epochs: 5
 lr: 1e-4
 bs: 64
 
+size: small
 freeze_encoder: True
 freeze_head: False
