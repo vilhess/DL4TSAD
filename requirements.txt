@@ -9,3 +9,4 @@ pytorch_lightning==2.5.0.post0
 scikit_learn==1.6.1
 torch==2.5.1
 tqdm==4.66.5
+kaggle

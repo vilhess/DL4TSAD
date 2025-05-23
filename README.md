@@ -4,48 +4,6 @@ In this repository, we implement several deep learning anomaly detection algorit
 
 ---
 
-## Datasets
-
-### Univariate
-
-> **NYC Taxi Demand Dataset** The dataset should be placed in the root directory under `data/nab`.    
-> **EC2 Request Latency System Failure Dataset** The dataset should be placed in the root directory under `data/nab`.    
-
-- These two datasets are sourced from the Numenta Anomaly Benchmark (NAB) and can be accessed [here](https://github.com/numenta/NAB/).
-
-### Multivariate
-
-> **SWAT Dataset**: Place the files in the root directory under `data/swat`.
-
-- The dataset is provided by iTrust, Centre for Research in Cyber Security, Singapore University of Technology and Design. More details and access requests can be made [here](https://itrust.sutd.edu.sg/itrust-labs_datasets/dataset_info/).
-
-- ⚠ **Important:** Preprocessing is required before using the data.  
-- The necessary preprocessing functions can be found in `dataset/swat`.
-
-
-
-> **Server Machine Dataset** The files should be placed in the root directory under `data/smd`.  
-
-- This dataset originates from the **OmniAnomaly** methods and can be downloaded by cloning the original [OmniAnomaly repository](https://github.com/NetManAIOps/OmniAnomaly).
-
-- ⚠ **Important:** Preprocessing is required before using the data.  
-- The necessary preprocessing functions can be found in `dataset/smd`.
-
-
-
-> **SMAP Dataset** The files should be placed in the root directory under `data/nasa`.  
-> **MSL Dataset** The files should be placed in the root directory under `data/nasa`.  
-
-- These datasets contains expert-labeled telemetry anomaly data from the Soil Moisture Active Passive (SMAP) satellite and the Mars Science Laboratory (MSL). They are provided from the **NASA Jet Propulsion Laboratory** [Paper](https://arxiv.org/abs/1802.04431) [GitHub](https://github.com/khundman/telemanom)
-
-> To process directly the **Server Machine Dataset** and the **SWAT Dataset**, you can use the following command:
-```python
-python dataset/preprocess.py
-```
-
----
-
-
 ## Models
 
 The models we consider are:
@@ -65,12 +23,59 @@ The models we consider are:
 - [**MADGAN**](https://arxiv.org/abs/1901.04997) - [GitHub: madgan-pytorch](https://github.com/Guillem96/madgan-pytorch)
 - [**CATCH**](https://arxiv.org/pdf/2410.12261) - [GitHub: CATCH](https://github.com/decisionintelligence/CATCH)
 - [**MTAD-GAT**](https://arxiv.org/pdf/2009.02040) - [GitHub: mtad-gat-pytorch](https://github.com/ML4ITS/mtad-gat-pytorch)
+- [**PatchTrAD**](https://arxiv.org/pdf/2504.08827) - [GitHub: PatchTrAD](https://github.com/vilhess/PatchTrAD)
 
 When available, we slightly edited the model's code from the original GitHub repository to make it work on our project. We follow the PyTorch Lightning framework.
 
 --- 
 
-## Training
+## 📊 Datasets
+
+### 🔹 Univariate
+
+- **NYC Taxi Demand**  
+  Location: `data/nab`
+
+- **EC2 Request Latency (System Failure)**  
+  Location: `data/nab`
+
+Both datasets come from the [Numenta Anomaly Benchmark (NAB)](https://github.com/numenta/NAB/).
+
+---
+
+### 🔸 Multivariate
+
+- **SWAT (Secure Water Treatment Testbed)**  
+  Location: `data/swat`  
+  Source: [iTrust, SUTD](https://itrust.sutd.edu.sg/itrust-labs_datasets/dataset_info/)
+
+- **Server Machine Dataset (SMD)**  
+  Location: `data/smd`  
+  Source: [OmniAnomaly](https://github.com/NetManAIOps/OmniAnomaly)
+
+- **SMAP & MSL (NASA Telemetry Data)**  
+  Location: `data/nasa`  
+  Source:  
+  [Paper](https://arxiv.org/abs/1802.04431) | [GitHub](https://github.com/khundman/telemanom)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Prepare the Datasets
+To install the datasets, you can use the following command:
+```bash
+python dataset/preprocess.py
+```
+For the **SWaT** dataset, you need to claim the data from the [iTrust website](https://itrust.sutd.edu.sg/itrust-labs_datasets/dataset_info/) and place it in the `data/swat` directory. Files needed: SWaT_Dataset_Normal_v1.xlsx, SWaT_Dataset_Attack_v0.xlsx
+
+### Training
 
 To train a given model on a specified dataset, use the following command:
 
@@ -102,10 +107,13 @@ where `<dataset_name>`, `<model_name>` and `<method_name>` can be one of the fol
 
 ---
 
-## Testing 
+### Testing 
 
 During testing phase, we evaluate model's performance using solely ROC-AUC as it does not depends on setting a threshold.
-
-## Configurations
+Results are saved to:  
+```bash
+results/aucs.json
+```
+### Configurations
 
 For each dataset and each model, the configurations can be view and edit in the ```conf/``` directory, following the [hydra](https://hydra.cc/) framework.
