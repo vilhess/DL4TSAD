@@ -308,7 +308,7 @@ class PatchTrAD(nn.Module):
 
         self.encoder = PatchTrADencoder(config)
         checkpoint_path = config.save_path +'.ckpt'
-        checkpoint = torch.load(checkpoint_path, weights_only=True)
+        checkpoint = torch.load(checkpoint_path, weights_only=True, map_location="cpu")
         self.encoder.load_state_dict(checkpoint)
         self.encoder.requires_grad_(False if config.freeze_encoder else True)
 
