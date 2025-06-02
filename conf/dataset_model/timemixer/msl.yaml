@@ -1,7 +1,7 @@
 name: msl
 
 bs: 128
-ws: 99
+ws: 95
 in_dim: 55
 
 epochs: 5
