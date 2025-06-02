@@ -1,0 +1,16 @@
+name: ec2_request_latency_system_failure
+
+bs: 256
+ws: 31
+in_dim: 1
+
+epochs: 20
+lr: 1e-4
+
+kernel_size: 7
+num_reduce: 3
+down_factor: 2
+n_layers: 2
+d_model: 16
+d_ff: 32
+dropout: 0.1

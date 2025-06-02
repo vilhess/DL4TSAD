@@ -1,0 +1,16 @@
+name: smap
+
+bs: 128
+ws: 99
+in_dim: 25
+
+epochs: 20
+lr: 1e-4
+
+kernel_size: 25
+num_reduce: 3
+down_factor: 2
+n_layers: 2
+d_model: 16
+d_ff: 32
+dropout: 0.1

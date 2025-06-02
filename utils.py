@@ -27,8 +27,8 @@ def load_model(model_name):
         from models.usad import USADLit as model
     elif model_name=="madgan":
         from models.madgan import MADGANLit as model
-    elif model_name=="diffae":
-        from models.diffae import FastDiffNetLit as model
+    elif model_name=="timemixer":
+        from models.timemixer import TimeMixerLit as model
     elif model_name=="catch":
         from models.catch import CatchLit as model
     elif model_name=="gat":
