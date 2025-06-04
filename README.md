@@ -25,6 +25,7 @@ The models we consider are:
 - [**MTAD-GAT**](https://arxiv.org/pdf/2009.02040) - [GitHub: mtad-gat-pytorch](https://github.com/ML4ITS/mtad-gat-pytorch)
 - [**MOMENT**](https://arxiv.org/pdf/2402.03885) - [GitHub: MOMENT](https://github.com/moment-timeseries-foundation-model/moment)
 - [**TimeMixer**](https://openreview.net/pdf?id=7oLshfEIC2) - [GitHub: TimeMixer](https://github.com/kwuking/TimeMixer)
+- [**GPT4TS**](https://arxiv.org/pdf/2302.11939) - [GitHub: GPT4TS](https://github.com/DAMO-DI-ML/NeurIPS2023-One-Fits-All/tree/main)
 - [**PatchTrAD**](https://arxiv.org/pdf/2504.08827) - [GitHub: PatchTrAD](https://github.com/vilhess/PatchTrAD)
 
 When available, we slightly edited the model's code from the original GitHub repository to make it work on our project. We follow the PyTorch Lightning framework.

@@ -1,0 +1,13 @@
+name: swat
+
+bs: 128
+ws: 99
+in_dim: 51
+
+lr: 1e-4
+epochs: 10
+stride: 1
+d_ff: 128
+patch_size: 1
+d_model: 768
+gpt_layer: 6
