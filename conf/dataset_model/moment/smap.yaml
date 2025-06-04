@@ -1,7 +1,7 @@
 name: smap
 in_dim: 25
 
-ws: 511
+ws: 255
 
 epochs: 20
 lr: 1e-4
@@ -10,3 +10,5 @@ bs: 64
 size: small
 freeze_encoder: True
 freeze_head: False
+
+need_pad: True

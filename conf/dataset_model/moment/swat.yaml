@@ -10,3 +10,5 @@ bs: 64
 size: small
 freeze_encoder: True
 freeze_head: False
+
+need_pad: False

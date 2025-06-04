@@ -61,6 +61,8 @@ class MomentLit(L.LightningModule):
         self.model = MomentAD(config)
         self.lr = config.lr
         self.auc = StreamAUC()
+
+        self.need_pad = config.need_pad
     
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -74,6 +76,10 @@ class MomentLit(L.LightningModule):
         return optimizer
     
     def get_loss(self, x, mode=None):
+        if self.need_pad:
+            x = torch.nn.functional.pad(x, (0, 512-x.shape[1]))
+            vals = x[:, 0:1, :].repeat(1, 512 - x.shape[1], 1)
+            x = torch.cat((x, vals), dim=1)
         return self.model.get_loss(x, mode=mode)
     
     def test_step(self, batch, batch_idx):
