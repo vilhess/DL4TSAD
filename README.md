@@ -24,6 +24,7 @@ The models we consider are:
 - [**CATCH**](https://arxiv.org/pdf/2410.12261) - [GitHub: CATCH](https://github.com/decisionintelligence/CATCH)
 - [**MTAD-GAT**](https://arxiv.org/pdf/2009.02040) - [GitHub: mtad-gat-pytorch](https://github.com/ML4ITS/mtad-gat-pytorch)
 - [**MOMENT**](https://arxiv.org/pdf/2402.03885) - [GitHub: MOMENT](https://github.com/moment-timeseries-foundation-model/moment)
+- [**TimeMixer**](https://openreview.net/pdf?id=7oLshfEIC2) - [GitHub: TimeMixer](https://github.com/kwuking/TimeMixer)
 - [**PatchTrAD**](https://arxiv.org/pdf/2504.08827) - [GitHub: PatchTrAD](https://github.com/vilhess/PatchTrAD)
 
 When available, we slightly edited the model's code from the original GitHub repository to make it work on our project. We follow the PyTorch Lightning framework.
@@ -104,6 +105,8 @@ where `<dataset_name>`, `<model_name>` and `<method_name>` can be one of the fol
 | `usad`       |                        | 
 | `catch`       |                        |
 | `MTAD-GAT`       |                        |
+| `MOMENT`       |                        |
+| `TimeMixer`       |                        |
 
 
 ---
