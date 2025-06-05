@@ -66,7 +66,7 @@ class MomentLit(L.LightningModule):
     
     def training_step(self, batch, batch_idx):
         x, _ = batch
-        loss = self.model.get_loss(x, mode="train")
+        loss = self.get_loss(x, mode="train")
         loss = loss.mean()
         self.log("train_loss", loss)
         return loss
@@ -77,7 +77,6 @@ class MomentLit(L.LightningModule):
     
     def get_loss(self, x, mode=None):
         if self.need_pad:
-            x = torch.nn.functional.pad(x, (0, 512-x.shape[1]))
             vals = x[:, 0:1, :].repeat(1, 512 - x.shape[1], 1)
             x = torch.cat((x, vals), dim=1)
         return self.model.get_loss(x, mode=mode)

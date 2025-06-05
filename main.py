@@ -44,7 +44,8 @@ def main(cfg: DictConfig):
         if model_name=="doc":
             LitModel.init_center(trainloader, device=DEVICE)
 
-        trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1, precision=cfg.precision if hasattr(cfg, "precision") else None)
+        precision = cfg.precision if hasattr(cfg, "precision") else None
+        trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1, precision=precision)
 
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
 
