@@ -10,8 +10,8 @@ for DATASET in "${datasets[@]}"; do
     declare -A models=(
         #["AELSTM"]="python main.py dataset=$DATASET model=aelstm"
         #["DOC"]="python main.py dataset=$DATASET model=doc"
-        #["PatchTST_REV"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=1 " 
-        #["PatchTST"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=0" 
+        ["PatchTST_REV"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=1 " 
+        ["PatchTST"]="python main.py dataset=$DATASET model=patchtst dataset_model.revin=0" 
         #["USAD"]="python main.py dataset=$DATASET model=usad"
         #["DROCC"]="python main.py dataset=$DATASET model=drocc"
         #["LSTM_REV"]="python main.py dataset=$DATASET model=lstm dataset_model.revin=1" 
@@ -27,7 +27,7 @@ for DATASET in "${datasets[@]}"; do
         #["JEPATCHTRAD"]="python main.py dataset=$DATASET model=jepatchtrad"
         #["MOMENT"]="python main.py dataset=$DATASET model=moment"
         #["TIME_MIXER"]="python main.py dataset=$DATASET model=timemixer"
-        ["GPT4TS"]="python main.py dataset=$DATASET model=gpt4ts"
+        #["GPT4TS"]="python main.py dataset=$DATASET model=gpt4ts"
     )   
 
     # Define an array to specify the execution order

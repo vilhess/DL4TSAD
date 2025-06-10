@@ -6,12 +6,12 @@ in_dim: 51
 
 epochs: 5
 lr: 1e-4
-e_layers: 3
-n_heads: 16
-d_model: 128
-d_ff: 256
-patch_len: 8
-stride: 6
+e_layers: 2
+n_heads: 4
+d_model: 64
+d_ff: 128
+patch_len: 16
+stride: 8
 kernel_size: 25
 pct_start: 0.3
 revin: 1
