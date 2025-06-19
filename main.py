@@ -6,6 +6,7 @@ from pytorch_lightning.loggers import WandbLogger
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import gc
+from datetime import datetime
 
 from utils import load_model, get_loaders, save_results
 
@@ -30,7 +31,8 @@ def main(cfg: DictConfig):
     model = load_model(model_name)
     loaders = get_loaders(dataset, config)
 
-    wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}")
+
+    wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
     aucs = []
     
     for i, (trainloader, testloader) in enumerate(loaders):
