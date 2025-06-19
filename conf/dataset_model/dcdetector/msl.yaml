@@ -1,8 +1,5 @@
-name: msl
-
 bs: 128
 ws: 99
-in_dim: 55
 
 epochs: 3
 lr: 1e-4

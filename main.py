@@ -26,7 +26,10 @@ def main(cfg: DictConfig):
 
     model_name = cfg.model.name
     dataset = cfg.dataset.name
+    in_dim = config.dataset.in_dim
     config = cfg.dataset_model
+    
+    config['in_dim'] = in_dim
     
     model = load_model(model_name)
     loaders = get_loaders(dataset, config)

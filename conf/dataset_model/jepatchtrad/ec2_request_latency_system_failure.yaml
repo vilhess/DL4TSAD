@@ -1,6 +1,3 @@
-name: ec2_request_latency_system_failure
-in_dim: 1
-
 ws: 99
 patch_len: 5
 

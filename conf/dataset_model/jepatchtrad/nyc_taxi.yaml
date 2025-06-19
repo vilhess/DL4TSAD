@@ -1,6 +1,3 @@
-name: nyc_taxi
-in_dim: 1
-
 ws: 99
 patch_len: 5
 

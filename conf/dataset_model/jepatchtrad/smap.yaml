@@ -1,6 +1,3 @@
-name: smap
-in_dim: 25
-
 ws: 99
 patch_len: 5
 

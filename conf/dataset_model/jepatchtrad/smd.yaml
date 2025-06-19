@@ -1,6 +1,3 @@
-name: smd
-in_dim: 38
-
 ws: 99
 patch_len: 5
 

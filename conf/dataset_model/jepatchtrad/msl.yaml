@@ -1,6 +1,3 @@
-name: msl
-in_dim: 55
-
 ws: 99
 patch_len: 5
 

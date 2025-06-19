@@ -1,8 +1,5 @@
-name: nyc_taxi
-
 bs: 256
 ws: 31
-in_dim: 1
 
 epochs: 20
 lr: 1e-4

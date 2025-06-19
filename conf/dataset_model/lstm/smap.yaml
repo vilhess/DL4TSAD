@@ -1,8 +1,5 @@
-name: smap
-
 bs: 128
 ws: 99
-in_dim: 25
 
 epochs: 30
 lr: 1e-4

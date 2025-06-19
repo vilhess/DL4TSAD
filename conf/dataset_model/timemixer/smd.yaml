@@ -1,8 +1,5 @@
-name: smd
-
 bs: 128
 ws: 95
-in_dim: 38
 
 epochs: 10
 lr: 1e-4

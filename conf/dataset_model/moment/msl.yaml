@@ -1,6 +1,3 @@
-name: msl
-in_dim: 55
-
 ws: 255
 
 epochs: 5
