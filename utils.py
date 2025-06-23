@@ -39,6 +39,8 @@ def load_model(model_name):
         from models.moment import MomentLit as model
     elif model_name=="gpt4ts":
         from models.gpt4ts import GPT4TSLit as model
+    elif model_name=="vaformer":
+        from models.vaformer import VAformerLit as model
     else:
         assert False, f"{model_name} is not implemented"
     return model

@@ -3,6 +3,8 @@ import numpy as np
 import lightning as L
 import wandb
 from pytorch_lightning.loggers import WandbLogger
+from lightning.pytorch.tuner import Tuner
+from lightning.pytorch import seed_everything
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import gc
@@ -39,7 +41,7 @@ def main(cfg: DictConfig):
     aucs = []
     
     for i, (trainloader, testloader) in enumerate(loaders):
-        torch.manual_seed(0)
+        seed_everything(0)
         print(f"Currently working on subset {i+1}/{len(loaders)}")
 
         config["len_loader"] = len(trainloader) # Useful for some lr scheduler
@@ -50,7 +52,22 @@ def main(cfg: DictConfig):
             LitModel.init_center(trainloader, device=DEVICE)
 
         precision = cfg.precision if hasattr(cfg, "precision") else None
-        trainer = L.Trainer(max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, log_every_n_steps=1, precision=precision)
+        norm = config.max_norm if hasattr(config, "max_norm") else 0.0
+        trainer = L.Trainer(
+                            max_epochs=config.epochs, logger=wandb_logger, enable_checkpointing=False, 
+                            log_every_n_steps=1, precision=precision, gradient_clip_val=norm 
+                            )
+    
+        if "lr" not in config:
+            config["lr"] = 1e-4  
+            tuner = Tuner(trainer)
+            lr_finder = tuner.lr_find(
+                model=LitModel, 
+                train_dataloaders=trainloader
+            )
+            new_lr = lr_finder.suggestion()
+            config["lr"] = new_lr
+            print(f"Suggested learning rate: {new_lr}")
 
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
 
