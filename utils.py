@@ -37,14 +37,14 @@ def load_model(model_name):
         from models.moment import MomentLit as model
     elif model_name=="gpt4ts":
         from models.gpt4ts import GPT4TSLit as model
-    elif model_name=="patchfm2":
+    elif model_name=="patchfm":
         from models.patchfm import PatchFMLit as model
     else:
         assert False, f"{model_name} is not implemented"
     return model
 
 def get_loaders(dataset, config):
-    av_datasets = ["nyc_taxi", "smd", "smap", "msl", "swat", "ec2_request_latency_system_failure"]
+    av_datasets = ["nyc_taxi", "smd", "smap", "msl", "swat", "ec2_request_latency_system_failure", "mgab"]
     assert dataset in av_datasets, f"Dataset ({dataset}) should be in {av_datasets}"
 
     if dataset in ["ec2_request_latency_system_failure", "nyc_taxi"]:
@@ -63,9 +63,12 @@ def get_loaders(dataset, config):
     elif dataset == "swat":
         from dataset.swat import get_loaders as get_swat_loaders
         loaders = [get_swat_loaders(window_size=config.ws, root_dir="data/swat", batch_size=config.bs)]
+
+    elif dataset == "mgab":
+        from dataset.mgab import get_loaders as get_mgab_loaders
+        loaders = [get_mgab_loaders(window_size=config.ws, root_dir="data/mgab", dataset_number=n, batch_size=config.bs) for n in range(1,11)]
         
     return loaders
-
 
 
 def load_results(filename="aucs.json"):
