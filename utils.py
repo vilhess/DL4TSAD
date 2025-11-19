@@ -33,14 +33,12 @@ def load_model(model_name):
         from models.catch import CatchLit as model
     elif model_name=="gat":
         from models.gat import MDAT_GAT_Lit as model
-    elif model_name=="jepatchtrad":
-        from models.jepatchtrad import JEPAtchTradLit as model
-    elif model_name=="moment":
+    elif model_name=="moment" or model_name=="zsmoment":
         from models.moment import MomentLit as model
     elif model_name=="gpt4ts":
         from models.gpt4ts import GPT4TSLit as model
-    elif model_name=="vaformer":
-        from models.vaformer import VAformerLit as model
+    elif model_name=="patchfm2":
+        from models.patchfm import PatchFMLit as model
     else:
         assert False, f"{model_name} is not implemented"
     return model

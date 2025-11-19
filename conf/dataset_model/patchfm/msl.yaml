@@ -1,0 +1,5 @@
+ws: 99
+bs: 16
+epochs: 0
+lr: None
+compile: True

@@ -59,6 +59,9 @@ class MomentLit(L.LightningModule):
     def __init__(self, config):
         super().__init__()
         self.model = MomentAD(config)
+        if config.freeze_head and config.freeze_encoder:
+            for p in self.model.parameters():
+                p.requires_grad = False
         self.lr = config.lr
         self.auc = StreamAUC()
 

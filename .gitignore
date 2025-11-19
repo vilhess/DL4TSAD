@@ -6,14 +6,16 @@
 *.DS_Store
 *checkpoints/
 wandb/
+*.pth
+archive/
 
 
-#multi_simu.py 
-#visu_multi.ipynb
-#results/simu_aucs.json
-#results/simu_aucs_std.json
-#run_multi.sh
-#temp.sh
+multi_simu.py 
+visu_multi.ipynb
+results/simu_aucs.json
+results/simu_aucs_std.json
+run_multi.sh
+temp.sh
 
 !requirements.txt
 
