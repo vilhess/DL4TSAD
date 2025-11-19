@@ -1,14 +1,14 @@
 bs: 256
-ws: 127
+ws: 511
 
-epochs: 20
+epochs: 10
 lr: 1e-4
 e_layers: 4
 n_heads: 16
 d_model: 256
 d_ff: 512
-patch_len: 16
-stride: 8
+patch_len: 32
+stride: 16
 kernel_size: 25
 pct_start: 0.3
 revin: 1
