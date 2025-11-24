@@ -14,7 +14,6 @@ from utils import load_model, get_loaders, save_results
 
 torch.multiprocessing.set_sharing_strategy('file_system')
 
-
 @hydra.main(version_base=None, config_path=f"conf", config_name="config")
 def main(cfg: DictConfig):
 
@@ -36,9 +35,12 @@ def main(cfg: DictConfig):
     model = load_model(model_name)
     loaders = get_loaders(dataset, config)
 
-
     wandb_logger = WandbLogger(project='DL4TSAD', name=f"{model_name}_{dataset}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
-    aucs = []
+
+    METRICS = ["auc", "vus_roc", 'vus_pr']
+    
+    config['metrics'] = METRICS
+    res_dic = {m: [] for m in METRICS}
     
     for i, (trainloader, testloader) in enumerate(loaders):
         seed_everything(0)
@@ -72,12 +74,12 @@ def main(cfg: DictConfig):
         trainer.fit(model=LitModel, train_dataloaders=trainloader)
 
         results = trainer.test(model=LitModel, dataloaders=testloader)
-        auc = results[0]["auc"]
-        print(f"AUC: {auc}")
+        scores = results[0]
 
-        aucs.append(auc)
-        wandb_logger.experiment.summary[f"auc_subset_{i+1}/{len(loaders)}"] = auc
-
+        for k, v in scores.items():
+            k = k.replace("test_", "")
+            res_dic[k].append(v)
+            wandb_logger.experiment.summary[f"{k}_subset_{i+1}/{len(loaders)}"] = v
 
         if DEVICE == "cuda": ### Free memory after each subset
             LitModel.to("cpu")
@@ -91,10 +93,11 @@ def main(cfg: DictConfig):
             torch.cuda.empty_cache()
             ###
         
-    final_auc = np.mean(aucs)
-    print(f"Final AUC: {final_auc}")
-    save_results(filename="results/aucs.json", dataset=dataset, model=f'{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}', score=round(final_auc, 4))
-    wandb_logger.experiment.summary[f"final_auc"] = final_auc
+    for k, v in res_dic.items():
+        mean_v = np.mean(v)
+        print(f"Final {k}: {mean_v}")
+        save_results(filename=f"results/{k}.json", dataset=dataset, model=f'{model_name}{"_rev" if hasattr(config, "revin") and config.revin else ""}', score=round(mean_v, 4))
+        wandb_logger.experiment.summary[f"final_{k}"] = mean_v
 
     wandb.finish()
 

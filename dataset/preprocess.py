@@ -84,12 +84,12 @@ if __name__ == "__main__":
     for url, dest in simple_files.items():
         download_file(url, dest)
     
-    base_url = "https://raw.githubusercontent.com/MarkusThill/MGAB/refs/heads/master"
+    #base_url = "https://raw.githubusercontent.com/MarkusThill/MGAB/refs/heads/master"
 
-    for i in range(1, 11):
-        url = f"{base_url}/{i}.csv"
-        dest = f"data/mgab2/{i}.csv"
-        download_file(url, dest)
+    #for i in range(1, 11):
+    #    url = f"{base_url}/{i}.csv"
+    #    dest = f"data/mgab2/{i}.csv"
+    #    download_file(url, dest)
 
     # 2. Download SMD dataset using GitHub API
     smd_api_url = "https://api.github.com/repos/NetManAIOps/OmniAnomaly/contents/ServerMachineDataset"

@@ -1,5 +1,0 @@
-ws: 1023
-bs: 128
-epochs: 0
-lr: None
-compile: True

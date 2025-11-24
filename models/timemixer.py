@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn 
 import torch.optim as optim
 import lightning as L 
-from models.auc import StreamAUC
+from models.scorer import StreamScorer
 
 class moving_avg(nn.Module):
     def __init__(self, kernel_size, stride=1):
@@ -336,7 +336,7 @@ class TimeMixerLit(L.LightningModule):
                                dropout=config.dropout)
         self.lr = config.lr
         self.criterion = nn.MSELoss()
-        self.auc = StreamAUC()
+        self.scorer = StreamScorer(config.metrics)
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -357,9 +357,10 @@ class TimeMixerLit(L.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         errors = self.get_loss(x, mode="test")
-        self.auc.update(errors, y)
+        self.scorer.update(errors, y)
     
     def on_test_epoch_end(self):
-        auc = self.auc.compute()
-        self.auc.reset()
-        self.log("auc", auc, prog_bar=True)
+        metrics = self.scorer.compute()
+        self.scorer.reset()
+        for k, v in metrics.items():
+            self.log(f"test_{k}", v, prog_bar=True)

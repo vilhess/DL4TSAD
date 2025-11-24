@@ -1,4 +1,4 @@
-ws: 256
+ws: 1024
 bs: 16
 epochs: 0
 lr: None

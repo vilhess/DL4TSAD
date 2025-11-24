@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import lightning as L 
 from momentfm import MOMENTPipeline
 from momentfm.utils.masking import Masking
-from models.auc import StreamAUC
+from models.scorer import StreamScorer
     
 class MomentAD(nn.Module):
     def __init__(self, config):
@@ -63,7 +63,7 @@ class MomentLit(L.LightningModule):
             for p in self.model.parameters():
                 p.requires_grad = False
         self.lr = config.lr
-        self.auc = StreamAUC()
+        self.scorer = StreamScorer(config.metrics)
 
         self.need_pad = config.need_pad
     
@@ -87,9 +87,10 @@ class MomentLit(L.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         errors = self.get_loss(x, mode="test")
-        self.auc.update(errors, y.int())
+        self.scorer.update(errors, y.int())
     
     def on_test_epoch_end(self):
-        auc = self.auc.compute()
-        self.auc.reset()
-        self.log("auc", auc, prog_bar=True)
+        metrics = self.scorer.compute()
+        self.scorer.reset()
+        for k, v in metrics.items():
+            self.log(f"test_{k}", v, prog_bar=True)

@@ -1,7 +1,7 @@
 import torch 
 import torch.nn as nn
 import lightning as L 
-from models.auc import StreamAUC
+from models.scorer import StreamScorer
 
 
 class ConvLayer(nn.Module):
@@ -224,7 +224,7 @@ class MDAT_GAT_Lit(L.LightningModule):
         self.criterion = nn.MSELoss(reduction="none")
         self.cri_mode = config.mode
         assert self.cri_mode in ["forecast", "recon"], f"Invalid mode: {self.cri_mode}. Choose between 'forecast' and 'recon'."
-        self.auc = StreamAUC()
+        self.scorer = StreamScorer(config.metrics)
         
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -257,9 +257,10 @@ class MDAT_GAT_Lit(L.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         errors = self.get_loss(x, mode="test")
-        self.auc.update(errors, y.int())
+        self.scorer.update(errors, y.int())
     
     def on_test_epoch_end(self):
-        auc = self.auc.compute()
-        self.auc.reset()
-        self.log("auc", auc, prog_bar=True)
+        metrics = self.scorer.compute()
+        self.scorer.reset()
+        for k, v in metrics.items():
+            self.log(f"test_{k}", v, prog_bar=True)

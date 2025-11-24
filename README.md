@@ -44,10 +44,6 @@ When available, we slightly edited the model's code from the original GitHub rep
 
 Both datasets come from the [Numenta Anomaly Benchmark (NAB)](https://github.com/numenta/NAB/).
 
-- **The Mackey-Glass Anomaly Benchmark**  
-  Location: `data/mgab`
-Source: [GitHub: MGAB](https://github.com/MarkusThill/MGAB)
-
 ---
 
 ### 🔸 Multivariate

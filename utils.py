@@ -44,7 +44,7 @@ def load_model(model_name):
     return model
 
 def get_loaders(dataset, config):
-    av_datasets = ["nyc_taxi", "smd", "smap", "msl", "swat", "ec2_request_latency_system_failure", "mgab"]
+    av_datasets = ["nyc_taxi", "smd", "smap", "msl", "swat", "ec2_request_latency_system_failure"]
     assert dataset in av_datasets, f"Dataset ({dataset}) should be in {av_datasets}"
 
     if dataset in ["ec2_request_latency_system_failure", "nyc_taxi"]:
@@ -63,10 +63,6 @@ def get_loaders(dataset, config):
     elif dataset == "swat":
         from dataset.swat import get_loaders as get_swat_loaders
         loaders = [get_swat_loaders(window_size=config.ws, root_dir="data/swat", batch_size=config.bs)]
-
-    elif dataset == "mgab":
-        from dataset.mgab import get_loaders as get_mgab_loaders
-        loaders = [get_mgab_loaders(window_size=config.ws, root_dir="data/mgab", dataset_number=n, batch_size=config.bs) for n in range(1,11)]
         
     return loaders
 

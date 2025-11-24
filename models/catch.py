@@ -6,7 +6,7 @@ from torch.nn.functional import gumbel_softmax
 from einops import rearrange
 import numpy as np 
 import math
-from models.auc import StreamAUC
+from models.scorer import StreamScorer
 
 
 class RevIN(nn.Module):
@@ -421,8 +421,8 @@ class CatchLit(L.LightningModule):
         self.temp_anomaly_score = nn.MSELoss(reduction="none")
         self.frequency_criterion = frequency_criterion(config)
 
-        self.auc = StreamAUC()
-    
+        self.scorer = StreamScorer(config.metrics)
+
     def training_step(self, batch, batch_idx):
         optim, optimM = self.optimizers()
         optim.zero_grad()
@@ -471,9 +471,10 @@ class CatchLit(L.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         errors = self.get_loss(x, mode="test")
-        self.auc.update(errors, y.int())
+        self.scorer.update(errors, y.int())
     
     def on_test_epoch_end(self):
-        auc = self.auc.compute()
-        self.auc.reset()
-        self.log("auc", auc, prog_bar=True)
+        metrics = self.scorer.compute()
+        self.scorer.reset()
+        for k, v in metrics.items():
+            self.log(f"test_{k}", v, prog_bar=True)

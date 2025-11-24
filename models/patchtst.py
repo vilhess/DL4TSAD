@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import numpy as np
 import lightning as L
 from models.revin import RevIN
-from models.auc import StreamAUC
+from models.scorer import StreamScorer
 
 
 class Transpose(nn.Module):
@@ -519,7 +519,7 @@ class PatchTSTLit(L.LightningModule):
         self.epoch = config.epochs
         self.len_loader = config.len_loader
         self.criterion = nn.MSELoss()
-        self.auc = StreamAUC()
+        self.scorer = StreamScorer(config.metrics)
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
@@ -545,9 +545,10 @@ class PatchTSTLit(L.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         errors = self.get_loss(x, mode="test")
-        self.auc.update(errors, y.int())
+        self.scorer.update(errors, y.int())
     
     def on_test_epoch_end(self):
-        auc = self.auc.compute()
-        self.auc.reset()
-        self.log("auc", auc, prog_bar=True)
+        metrics = self.scorer.compute()
+        self.scorer.reset()
+        for k, v in metrics.items():
+            self.log(f"test_{k}", v, prog_bar=True)
