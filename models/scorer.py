@@ -35,7 +35,7 @@ class StreamScorer:
             results['auc'] = auc
 
         if "vus_pr" in self.metrics or "vus_roc" in self.metrics:
-            slidingWindow = min(int(get_sliding_window(self.test_labels)), 10)
+            slidingWindow = max(int(get_sliding_window(self.test_labels)), 10)
             metrics = get_metrics(self.test_scores, self.test_labels, slidingWindow=slidingWindow, metric="vus")
             results["vus_roc"] = metrics["VUS_ROC"]
             results["vus_pr"] = metrics["VUS_PR"]
