@@ -114,10 +114,12 @@ where `<dataset_name>`, `<model_name>` and `<method_name>` can be one of the fol
 
 ### Testing 
 
-During testing phase, we evaluate model's performance using solely ROC-AUC as it does not depends on setting a threshold.
+During testing phase, we evaluate model's performance considering ROC-AUC, ROC-VUS and PR-VUS as they do not depend on setting a threshold.
 Results are saved to:  
 ```bash
-results/aucs.json
+results/auc.json
+results/vus_roc.json
+results/vus_pr.json
 ```
 ### Configurations
 
