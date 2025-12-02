@@ -51,11 +51,17 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
 
         self.lstm = nn.LSTM(input_size=hidden_size,  hidden_size=input_dim, num_layers=num_layers, batch_first=True, bidirectional=bidirectional)
+        self.fc1 = nn.Linear(in_features=input_dim, out_features=input_dim)
+        self.fc_out = nn.Linear(in_features=input_dim, out_features=input_dim)
+        self.relu = nn.ReLU()
 
     def forward(self, x, hidden):
 
         output, (hidden, cell) = self.lstm(x, hidden)
-        return output[:, -1, :]
+        output = output[:, -1, :]
+        output = self.relu(self.fc1(output))
+        output = self.fc_out(output)
+        return output
     
 
 class AELSTM(nn.Module):
@@ -66,9 +72,9 @@ class AELSTM(nn.Module):
         hidden_size=config.hid_size
         latent_dim = config.latent_dim
 
-        self.encoder = Encoder(input_dim=input_dim, hidden_size=hidden_size, num_layers=1, bidirectional=False)
+        self.encoder = Encoder(input_dim=input_dim, hidden_size=hidden_size, num_layers=2, bidirectional=False)
         self.bottleneck = BottleNeck(input_dim=input_dim, hidden_size=hidden_size, latent_size=latent_dim)
-        self.decoder = Decoder(input_dim=input_dim, hidden_size=hidden_size, num_layers=1, bidirectional=False)
+        self.decoder = Decoder(input_dim=input_dim, hidden_size=hidden_size, num_layers=2, bidirectional=False)
 
     def forward(self, x):
         output, (hidden, cell) = self.encoder(x)
