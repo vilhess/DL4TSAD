@@ -90,7 +90,7 @@ class USADLit(L.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         errors = self.get_loss(x, mode="test")
-        self.auc.update(errors, y.int())
+        self.scorer.update(errors, y.int())
     
     def on_test_epoch_end(self):
         metrics = self.scorer.compute()
