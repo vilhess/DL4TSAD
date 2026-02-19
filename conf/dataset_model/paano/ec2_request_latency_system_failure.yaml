@@ -1,0 +1,17 @@
+bs: 512
+
+patch_size: 64
+stride: 1
+
+radius: 2
+num_iter: 200
+lambda_weight: 1.
+temperature: 1.
+n_rand_patches: 5
+lr: 1e-4
+top_k: 3
+num_cores: 0.1
+
+projection_dim: 256
+layers: [128, 256, 128, 64]
+kss: [7, 5, 3, 3]
